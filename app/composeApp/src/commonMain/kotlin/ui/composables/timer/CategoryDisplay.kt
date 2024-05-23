@@ -1,4 +1,4 @@
-package ui.components.timer
+package ui.composables.timer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
