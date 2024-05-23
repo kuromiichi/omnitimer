@@ -1,4 +1,4 @@
-package models
+package data.models
 
 data class Scramble(
     val value: String,

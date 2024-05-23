@@ -1,4 +1,4 @@
-package models
+package data.models
 
 import kotlinx.datetime.LocalDateTime
 import kotlin.time.Duration

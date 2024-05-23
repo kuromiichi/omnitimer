@@ -1,4 +1,4 @@
-package models
+package data.models
 
 data class Subcategory(
     val name: String,
