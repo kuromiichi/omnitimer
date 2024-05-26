@@ -20,8 +20,8 @@ fun CategoryDisplay(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
     ) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -31,7 +31,7 @@ fun CategoryDisplay(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    categoryName,
+                    text = categoryName,
                     modifier = Modifier.padding(8.dp)
                 )
             }
@@ -44,7 +44,7 @@ fun CategoryDisplay(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    subcategoryName,
+                    text = subcategoryName,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(8.dp)

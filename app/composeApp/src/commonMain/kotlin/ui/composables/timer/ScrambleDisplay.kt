@@ -23,29 +23,29 @@ fun ScrambleDisplay(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.secondary,
         shadowElevation = 4.dp,
+        modifier = modifier
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    scramble,
+                    text = scramble,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(16.dp)
                 )
             }
             Surface(
-                modifier = Modifier.padding(8.dp),
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 shadowElevation = 4.dp,
+                modifier = Modifier.padding(8.dp)
             ) {
                 IconButton(
                     onClick = { onRefreshClick() }
@@ -59,3 +59,4 @@ fun ScrambleDisplay(
         }
     }
 }
+
