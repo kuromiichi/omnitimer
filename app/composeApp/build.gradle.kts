@@ -52,6 +52,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(compose.material3)
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
