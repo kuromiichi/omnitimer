@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -20,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -39,16 +42,24 @@ fun TimerScreen() {
 
     val windowSizeClass = calculateWindowSizeClass()
 
-    when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Expanded -> TimerScreenLandscape(viewModel, state)
-        else -> TimerScreenPortrait(viewModel, state)
+    val timerFontSize = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Expanded -> 144.sp
+        else -> 96.sp
+    }
+
+    Surface(color = MaterialTheme.colorScheme.background) {
+        when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Expanded -> TimerScreenLandscape(viewModel, state, timerFontSize)
+            else -> TimerScreenPortrait(viewModel, state, timerFontSize)
+        }
     }
 }
 
 @Composable
 fun TimerScreenPortrait(
     viewModel: TimerViewModel,
-    state: TimerUiState
+    state: TimerUiState,
+    timerFontSize: TextUnit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -65,7 +76,7 @@ fun TimerScreenPortrait(
         )
         TimerArea(
             time = viewModel.getTime(),
-            fontSize = 48.sp,
+            fontSize = timerFontSize,
             onSurfaceClick = { viewModel.toggleTimerState() },
             modifier = Modifier.weight(1f).fillMaxWidth()
         )
@@ -94,7 +105,8 @@ fun TimerScreenPortrait(
 @Composable
 fun TimerScreenLandscape(
     viewModel: TimerViewModel,
-    state: TimerUiState
+    state: TimerUiState,
+    timerFontSize: TextUnit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -141,7 +153,7 @@ fun TimerScreenLandscape(
             ) {
                 TimerArea(
                     time = viewModel.getTime(),
-                    fontSize = 144.sp,
+                    fontSize = timerFontSize,
                     onSurfaceClick = { viewModel.toggleTimerState() },
                     modifier = Modifier.fillMaxSize()
                 )
