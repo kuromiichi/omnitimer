@@ -1,6 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,23 +7,6 @@ plugins {
 }
 
 kotlin {
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        moduleName = "composeApp"
-        browser {
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(project.projectDir.path)
-                    }
-                }
-            }
-        }
-        binaries.executable()
-    }
-    
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -33,15 +14,18 @@ kotlin {
             }
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            // AndroidSVG for SVG
+            implementation(libs.androidsvg.aar)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -51,11 +35,24 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            // Utils
             implementation(compose.material3)
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+            implementation(libs.windowsizeclass)
+            implementation(libs.kotlinx.datetime)
+
+            // TNoodle for Scrambles
+            implementation(libs.tnoodle)
+
+            // MokoMvvm for ViewModels
+            implementation(libs.moko.mvvm.core)
+            implementation(libs.moko.mvvm.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+
+            // Batik for SVG
+            implementation(libs.batik.transcoder)
+            implementation(libs.batik.codec)
         }
     }
 }
@@ -104,8 +101,4 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
-}
-
-compose.experimental {
-    web.application {}
 }
