@@ -14,6 +14,12 @@ compose = "1.6.7"
 compose-plugin = "1.6.10"
 junit = "4.13.2"
 kotlin = "1.9.24"
+windowsizeclass = "0.5.0"
+kotlinx-datetime = "0.6.0"
+tnoodle = "0.19.2"
+moko-mvvm = "0.16.1"
+androidsvg = "1.4"
+batik = "1.17"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -28,6 +34,14 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+windowsizeclass = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowsizeclass" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+tnoodle = { module = "org.worldcubeassociation.tnoodle:lib-scrambles", version.ref = "tnoodle" }
+moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko-mvvm" }
+moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "moko-mvvm" }
+androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
+batik-transcoder = { module = "org.apache.xmlgraphics:batik-transcoder", version.ref = "batik" }
+batik-codec = { module = "org.apache.xmlgraphics:batik-codec", version.ref = "batik" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -3,6 +3,7 @@ package ui.composables.timer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -27,7 +28,7 @@ fun CategoryDisplay(
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.tertiary,
             shadowElevation = 4.dp,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.weight(2f).fillMaxHeight()
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
@@ -40,7 +41,7 @@ fun CategoryDisplay(
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.tertiary,
             shadowElevation = 4.dp,
-            modifier = Modifier.weight(3f)
+            modifier = Modifier.weight(3f).fillMaxHeight()
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
