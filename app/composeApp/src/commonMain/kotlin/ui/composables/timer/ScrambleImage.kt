@@ -1,34 +1,36 @@
 package ui.composables.timer
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ScrambleImage(
-    image: DrawableResource,
+    image: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.fillMaxHeight(),
+        modifier = modifier
+            .height(IntrinsicSize.Max)
+            .width(IntrinsicSize.Max),
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.tertiary,
         shadowElevation = 4.dp
     ) {
-        Image(
-            painter = painterResource(resource = image),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize().padding(8.dp)
+        ) {
+            image()
+        }
     }
 }
