@@ -17,5 +17,11 @@ data class SettingsUiState(
         "ao50" to false,
         "ao100" to false
     ),
-    val isDeleteDialogShowing: Boolean = false
+    val isDeleteDialogShowing: Boolean = false,
+    val email: String = "",
+    val password: String = "",
+    val isLogin: Boolean = false,
+    val isUserLogged: Boolean = false,
+    val username: String = "",
+    val isLoginDialogShowing: Boolean = false
 )
