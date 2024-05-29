@@ -160,3 +160,6 @@ sonarlint/
 
 # fleet config
 .fleet/
+
+# artifacts
+.idea/artifacts/
