@@ -40,4 +40,44 @@ class SettingsViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(isDeleteDialogShowing = false)
     }
 
+    fun onEmailChange(email: String) {
+        _uiState.value = _uiState.value.copy(email = email)
+    }
+
+    fun onPasswordChange(password: String) {
+        _uiState.value = _uiState.value.copy(password = password)
+    }
+
+    fun onLoginClick() {
+        TODO("Not yet implemented")
+    }
+
+    fun onRegisterClick() {
+        TODO("Not yet implemented")
+    }
+
+    fun onChangeToRegisterClick() {
+        _uiState.value = _uiState.value.copy(isLogin = false)
+    }
+
+    fun onChangeToLoginClick() {
+        _uiState.value = _uiState.value.copy(isLogin = true)
+    }
+
+    fun onDialogLoginClick() {
+        _uiState.value = _uiState.value.copy(isLoginDialogShowing = true)
+    }
+
+    fun onLogoutClick() {
+        _uiState.value = _uiState.value.copy(isUserLogged = false)
+    }
+
+    fun onLoginDialogDismissClick() {
+        _uiState.value = _uiState.value.copy(isLoginDialogShowing = false)
+    }
+
+    fun onLoginDialogConfirmClick() {
+        _uiState.value = _uiState.value.copy(isLoginDialogShowing = false)
+    }
+
 }

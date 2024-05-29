@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.composables.settings.AccountDialog
 import ui.composables.settings.DeleteSolvesDialog
 import ui.composables.settings.SettingsItem
 import ui.composables.settings.SettingsToggle
@@ -37,7 +40,8 @@ fun SettingsScreen() {
         Column(
             modifier = Modifier
                 .width(intrinsicSize = IntrinsicSize.Max)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = CenterHorizontally
         ) {
@@ -46,7 +50,45 @@ fun SettingsScreen() {
                 isExpanded = state.isExpanded["account"] ?: false,
                 onExpandedClick = { viewModel.onExpandedClick("account") }
             ) {
-                Text("TODO")
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text =
+                        if (state.isUserLogged) "Logged in as ${state.username}"
+                        else "Not logged in, try logging in using the button below"
+                    )
+                    if (state.isUserLogged) {
+                        Button(onClick = { viewModel.onLogoutClick() }) {
+                            Text(text = "Logout")
+                        }
+                    } else {
+                        Button(onClick = { viewModel.onDialogLoginClick() }) {
+                            Text(text = "Login")
+                        }
+                    }
+                    if (state.isLoginDialogShowing) {
+                        AccountDialog(
+                            isLogin = state.isLogin,
+                            email = state.email,
+                            password = state.password,
+                            onEmailChange = { viewModel.onEmailChange(it) },
+                            onPasswordChange = { viewModel.onPasswordChange(it) },
+                            onTopButtonClicked = {
+                                if (state.isLogin) viewModel.onLoginClick()
+                                else viewModel.onRegisterClick()
+                            },
+                            onBottomButtonClicked = {
+                                if (state.isLogin) viewModel.onChangeToRegisterClick()
+                                else viewModel.onChangeToLoginClick() },
+                            isOpen = state.isLoginDialogShowing,
+                            onDismiss = { viewModel.onLoginDialogDismissClick() },
+                            onConfirm = { viewModel.onLoginDialogConfirmClick() }
+                        )
+                    }
+                }
             }
 
             SettingsItem(
