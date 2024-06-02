@@ -13,10 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,8 +24,12 @@ fun AccountCredentials(
     isLogin: Boolean,
     email: String,
     password: String,
+    passwordRepeat: String,
+    name: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
+    onPasswordRepeatChange: (String) -> Unit,
+    onNameChange: (String) -> Unit,
     onTopButtonClicked: (Boolean) -> Unit,
     onBottomButtonClicked: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -61,14 +61,19 @@ fun AccountCredentials(
                 label = { Text(text = "Password") }
             )
             if (!isLogin) {
-                var pwdRepeat by rememberSaveable { mutableStateOf("") }
                 TextField(
-                    value = pwdRepeat,
+                    value = passwordRepeat,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    onValueChange = { pwdRepeat = it },
+                    onValueChange = { onPasswordRepeatChange(it) },
                     singleLine = true,
                     label = { Text(text = "Repeat Password") }
+                )
+                TextField(
+                    value = name,
+                    onValueChange = { onNameChange(it) },
+                    singleLine = true,
+                    label = { Text(text = "Name") }
                 )
             }
             Column(

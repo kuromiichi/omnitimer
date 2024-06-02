@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -43,7 +42,7 @@ fun SettingsScreen() {
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SettingsItem(
                 groupName = "Account settings",
@@ -57,7 +56,7 @@ fun SettingsScreen() {
                 ) {
                     Text(
                         text =
-                        if (state.isUserLogged) "Logged in as ${state.username}"
+                        if (state.isUserLogged) "Logged in as ${state.name}"
                         else "Not logged in, try logging in using the button below"
                     )
                     if (state.isUserLogged) {
@@ -74,15 +73,20 @@ fun SettingsScreen() {
                             isLogin = state.isLogin,
                             email = state.email,
                             password = state.password,
+                            passwordRepeat = state.passwordRepeat,
+                            name = state.name,
                             onEmailChange = { viewModel.onEmailChange(it) },
                             onPasswordChange = { viewModel.onPasswordChange(it) },
+                            onPasswordRepeatChange = { viewModel.onPasswordRepeatChange(it) },
+                            onNameChange = { viewModel.onNameChange(it) },
                             onTopButtonClicked = {
                                 if (state.isLogin) viewModel.onLoginClick()
                                 else viewModel.onRegisterClick()
                             },
                             onBottomButtonClicked = {
                                 if (state.isLogin) viewModel.onChangeToRegisterClick()
-                                else viewModel.onChangeToLoginClick() },
+                                else viewModel.onChangeToLoginClick()
+                            },
                             isOpen = state.isLoginDialogShowing,
                             onDismiss = { viewModel.onLoginDialogDismissClick() },
                             onConfirm = { viewModel.onLoginDialogConfirmClick() }
