@@ -1,12 +1,20 @@
 package ui.screens.settings
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import io.github.jan.supabase.exceptions.BadRequestRestException
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.runBlocking
+import services.SupabaseService
 
 class SettingsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val supabase by lazy { SupabaseService.supabase }
 
     // Dialog-related functions
     fun onDialogLoginClick() {
@@ -14,11 +22,14 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun onLoginDialogDismissClick() {
-        _uiState.value = _uiState.value.copy(isLoginDialogShowing = false)
-    }
-
-    fun onLoginDialogConfirmClick() {
-        _uiState.value = _uiState.value.copy(isLoginDialogShowing = false)
+        _uiState.value = _uiState.value.copy(
+            email = "",
+            password = "",
+            passwordRepeat = "",
+            name = "",
+            isLoginDialogShowing = false,
+            isLogin = true
+        )
     }
 
     fun onDeleteSolvesButtonClick() {
@@ -36,6 +47,8 @@ class SettingsViewModel : ViewModel() {
     // User action functions
     fun onLogoutClick() {
         _uiState.value = _uiState.value.copy(isUserLogged = false)
+
+        // TODO: logout user
     }
 
     fun onLoginClick() {
@@ -44,11 +57,37 @@ class SettingsViewModel : ViewModel() {
 
     fun onRegisterClick() {
         if (uiState.value.password != uiState.value.passwordRepeat) {
-            _uiState.value = _uiState.value.copy(errorMessage = "Passwords do not match")
+            _uiState.value = _uiState.value.copy(errorMessage = "Passwords do not match.")
             return
         }
 
-        // TODO: register user
+        if (listOf(
+                uiState.value.email,
+                uiState.value.password,
+                uiState.value.passwordRepeat,
+                uiState.value.name
+            ).any { it.isBlank() }
+        ) {
+            _uiState.value = _uiState.value.copy(errorMessage = "Please fill all fields.")
+            return
+        }
+
+        var userInfo: UserInfo? = null
+        runBlocking {
+            try {
+                userInfo = supabase.auth.signUpWith(Email) {
+                    email = uiState.value.email
+                    password = uiState.value.password
+                }
+            } catch (e: BadRequestRestException) {
+                _uiState.value =
+                    _uiState.value.copy(errorMessage = e.error)
+            }
+        }
+
+        if (userInfo == null) return
+
+        _uiState.value = _uiState.value.copy(isUserLogged = true)
     }
 
     fun onChangeToLoginClick() {

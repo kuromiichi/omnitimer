@@ -22,7 +22,7 @@ data class SettingsUiState(
     val password: String = "",
     val passwordRepeat: String = "",
     val name: String = "",
-    val isLogin: Boolean = false,
+    val isLogin: Boolean = true,
     val isUserLogged: Boolean = false,
     val isLoginDialogShowing: Boolean = false,
     val errorMessage: String = ""
