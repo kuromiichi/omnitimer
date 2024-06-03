@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -46,6 +47,14 @@ kotlin {
             // MokoMvvm for ViewModels
             implementation(libs.moko.mvvm.core)
             implementation(libs.moko.mvvm.compose)
+
+            // Supabase
+            implementation(libs.supabase.gotrue)
+            implementation(libs.supabase.postgrest)
+            implementation(libs.supabase.realtime)
+
+            // Ktor
+            implementation(libs.ktor.client.okhttp)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
