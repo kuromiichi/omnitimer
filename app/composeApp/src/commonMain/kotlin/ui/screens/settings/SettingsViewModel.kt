@@ -17,11 +17,11 @@ class SettingsViewModel : ViewModel() {
     private val supabase by lazy { SupabaseService.supabase }
 
     // Dialog-related functions
-    fun onDialogLoginClick() {
+    fun onShowAccountDialogClick() {
         _uiState.value = _uiState.value.copy(isLoginDialogShowing = true)
     }
 
-    fun onLoginDialogDismissClick() {
+    fun onAccountDialogDismiss() {
         _uiState.value = _uiState.value.copy(
             email = "",
             password = "",

@@ -64,7 +64,7 @@ fun SettingsScreen() {
                             Text(text = "Logout")
                         }
                     } else {
-                        Button(onClick = { viewModel.onDialogLoginClick() }) {
+                        Button(onClick = { viewModel.onShowAccountDialogClick() }) {
                             Text(text = "Login")
                         }
                     }
@@ -89,8 +89,8 @@ fun SettingsScreen() {
                                 else viewModel.onChangeToLoginClick()
                             },
                             isOpen = state.isLoginDialogShowing,
-                            onDismiss = { viewModel.onLoginDialogDismissClick() },
-                            onConfirm = { viewModel.onLoginDialogDismissClick() },
+                            onDismiss = { viewModel.onAccountDialogDismiss() },
+                            onConfirm = { viewModel.onAccountDialogDismiss() },
                         )
                     }
                 }
