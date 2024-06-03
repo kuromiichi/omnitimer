@@ -75,6 +75,7 @@ fun SettingsScreen() {
                             password = state.password,
                             passwordRepeat = state.passwordRepeat,
                             name = state.name,
+                            errorMessage = state.errorMessage,
                             onEmailChange = { viewModel.onEmailChange(it) },
                             onPasswordChange = { viewModel.onPasswordChange(it) },
                             onPasswordRepeatChange = { viewModel.onPasswordRepeatChange(it) },
@@ -89,7 +90,7 @@ fun SettingsScreen() {
                             },
                             isOpen = state.isLoginDialogShowing,
                             onDismiss = { viewModel.onLoginDialogDismissClick() },
-                            onConfirm = { viewModel.onLoginDialogConfirmClick() }
+                            onConfirm = { viewModel.onLoginDialogDismissClick() },
                         )
                     }
                 }

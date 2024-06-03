@@ -26,6 +26,7 @@ fun AccountCredentials(
     password: String,
     passwordRepeat: String,
     name: String,
+    errorMessage: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onPasswordRepeatChange: (String) -> Unit,
@@ -46,49 +47,50 @@ fun AccountCredentials(
                 text = if (isLogin) "Login" else "Register",
                 style = MaterialTheme.typography.headlineMedium
             )
-            TextField(
-                value = email,
+            TextField(value = email,
                 onValueChange = { onEmailChange(it) },
                 singleLine = true,
-                label = { Text(text = "Email") }
-            )
-            TextField(
-                value = password,
+                label = { Text(text = "Email") })
+            TextField(value = password,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 onValueChange = { onPasswordChange(it) },
                 singleLine = true,
-                label = { Text(text = "Password") }
-            )
+                label = { Text(text = "Password") })
             if (!isLogin) {
-                TextField(
-                    value = passwordRepeat,
+                TextField(value = passwordRepeat,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     onValueChange = { onPasswordRepeatChange(it) },
                     singleLine = true,
-                    label = { Text(text = "Repeat Password") }
-                )
-                TextField(
-                    value = name,
+                    label = { Text(text = "Repeat Password") })
+                TextField(value = name,
                     onValueChange = { onNameChange(it) },
                     singleLine = true,
-                    label = { Text(text = "Name") }
-                )
+                    label = { Text(text = "Name") })
+            }
+            if (errorMessage.isNotEmpty()) {
+                Surface(
+                    shape = MaterialTheme.shapes.small,
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    shadowElevation = 4.dp
+                ) {
+                    Text(
+                        text = errorMessage, modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
             Column(
                 modifier = Modifier.width(intrinsicSize = IntrinsicSize.Max),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Button(
-                    onClick = { onTopButtonClicked(isLogin) },
-                    modifier = Modifier.fillMaxWidth()
+                    onClick = { onTopButtonClicked(isLogin) }, modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = if (isLogin) "Login" else "Register")
                 }
                 Button(
-                    onClick = { onBottomButtonClicked(isLogin) },
-                    modifier = Modifier.fillMaxWidth()
+                    onClick = { onBottomButtonClicked(isLogin) }, modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = if (isLogin) "Register" else "Login")
                 }
