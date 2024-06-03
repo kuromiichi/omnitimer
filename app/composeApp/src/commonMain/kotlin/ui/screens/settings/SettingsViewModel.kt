@@ -91,28 +91,52 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun onChangeToLoginClick() {
-        _uiState.value = _uiState.value.copy(isLogin = true)
+        _uiState.value = _uiState.value.copy(
+            email = "",
+            password = "",
+            passwordRepeat = "",
+            name = "",
+            isLogin = true
+        )
     }
 
     fun onChangeToRegisterClick() {
-        _uiState.value = _uiState.value.copy(isLogin = false)
+        _uiState.value = _uiState.value.copy(
+            email = "",
+            password = "",
+            passwordRepeat = "",
+            name = "",
+            isLogin = false
+        )
     }
 
     // User information change functions
     fun onEmailChange(email: String) {
-        _uiState.value = _uiState.value.copy(email = email)
+        _uiState.value = _uiState.value.copy(
+            email = email,
+            errorMessage = ""
+        )
     }
 
     fun onPasswordChange(password: String) {
-        _uiState.value = _uiState.value.copy(password = password)
+        _uiState.value = _uiState.value.copy(
+            password = password,
+            errorMessage = ""
+        )
     }
 
     fun onPasswordRepeatChange(passwordRepeat: String) {
-        _uiState.value = _uiState.value.copy(passwordRepeat = passwordRepeat)
+        _uiState.value = _uiState.value.copy(
+            passwordRepeat = passwordRepeat,
+            errorMessage = ""
+        )
     }
 
     fun onNameChange(name: String) {
-        _uiState.value = _uiState.value.copy(name = name)
+        _uiState.value = _uiState.value.copy(
+            name = name,
+            errorMessage = ""
+        )
     }
 
     // Expandable settings and toggles
