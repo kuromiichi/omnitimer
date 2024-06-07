@@ -46,6 +46,13 @@ kotlin {
             // MokoMvvm for ViewModels
             implementation(libs.moko.mvvm.core)
             implementation(libs.moko.mvvm.compose)
+
+            // Voyager for Navigation
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenmodel)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.bottom.sheet.navigator)
+            implementation(libs.voyager.transitions)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

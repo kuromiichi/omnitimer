@@ -20,6 +20,7 @@ tnoodle = "0.19.2"
 moko-mvvm = "0.16.1"
 androidsvg = "1.4"
 batik = "1.17"
+voyager = "1.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -42,6 +43,12 @@ moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "m
 androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 batik-transcoder = { module = "org.apache.xmlgraphics:batik-transcoder", version.ref = "batik" }
 batik-codec = { module = "org.apache.xmlgraphics:batik-codec", version.ref = "batik" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
+voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-bottom-sheet-navigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
