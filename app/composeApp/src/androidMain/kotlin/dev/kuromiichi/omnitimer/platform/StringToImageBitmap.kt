@@ -1,4 +1,4 @@
-package platform
+package dev.kuromiichi.omnitimer.platform
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.ImageBitmap

@@ -1,3 +1,5 @@
+package dev.kuromiichi.omnitimer
+
 import android.os.Build
 
 class AndroidPlatform : Platform {
