@@ -1,11 +1,12 @@
-package ui.screens.timer
+package dev.kuromiichi.omnitimer.ui.screens.timer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.kuromiichi.omnitimer.data.models.Status
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import dev.kuromiichi.omnitimer.data.models.Solve
+import dev.kuromiichi.omnitimer.data.models.Status
 import dev.kuromiichi.omnitimer.platform.toImageBitmap
 import dev.kuromiichi.omnitimer.services.TNoodleService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,9 +23,11 @@ class TimerViewModel(
     private val _uiState = MutableStateFlow(TimerUiState())
     val uiState = _uiState.asStateFlow()
 
-    var startTime: Long = 0
-    var endTime: Long = 0
-    var isRunning: Boolean = false
+    private var startTime: Long = 0
+    private var endTime: Long = 0
+    private var isRunning: Boolean = false
+
+    private var lastSolve: Solve? = null
 
     private var timerJob: Job? = null
 
@@ -77,6 +80,8 @@ class TimerViewModel(
     }
 
     fun toggleTimerState() {
+        // TODO: check for inspection in settings
+        // TODO: create new solve
         if (isRunning) {
             endTime = System.currentTimeMillis()
             isRunning = false
@@ -97,9 +102,13 @@ class TimerViewModel(
 
     fun changePenalty(penalty: Status) {
         _uiState.value = _uiState.value.copy(penalty = penalty)
+
+        // TODO: update repository
     }
 
     fun deleteLastSolve() {
-        // TODO
+        if (lastSolve == null) return
+
+        // TODO: delete from repository
     }
 }

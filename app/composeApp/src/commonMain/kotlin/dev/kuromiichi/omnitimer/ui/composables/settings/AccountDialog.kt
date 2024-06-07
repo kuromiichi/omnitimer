@@ -1,4 +1,4 @@
-package ui.composables.settings
+package dev.kuromiichi.omnitimer.ui.composables.settings
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -7,6 +7,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dev.kuromiichi.omnitimer.ui.composables.settings.AccountCredentials
 
 @Composable
 fun AccountDialog(

@@ -1,4 +1,4 @@
-package ui.screens.settings
+package dev.kuromiichi.omnitimer.ui.screens.settings
 
 data class SettingsUiState(
     val isExpanded: Map<String, Boolean> = mapOf(

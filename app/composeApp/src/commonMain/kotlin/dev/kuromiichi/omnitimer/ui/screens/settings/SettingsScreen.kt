@@ -1,4 +1,4 @@
-package ui.screens.settings
+package dev.kuromiichi.omnitimer.ui.screens.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,15 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import ui.composables.settings.AccountDialog
-import ui.composables.settings.DeleteSolvesDialog
-import ui.composables.settings.SettingsItem
-import ui.composables.settings.SettingsToggle
+import dev.kuromiichi.omnitimer.ui.composables.settings.AccountDialog
+import dev.kuromiichi.omnitimer.ui.composables.settings.DeleteSolvesDialog
+import dev.kuromiichi.omnitimer.ui.composables.settings.SettingsItem
+import dev.kuromiichi.omnitimer.ui.composables.settings.SettingsToggle
 
 @Composable
 fun SettingsScreen() {
@@ -43,7 +42,7 @@ fun SettingsScreen() {
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SettingsItem(
                 groupName = "Account settings",
@@ -82,7 +81,8 @@ fun SettingsScreen() {
                             },
                             onBottomButtonClicked = {
                                 if (state.isLogin) viewModel.onChangeToRegisterClick()
-                                else viewModel.onChangeToLoginClick() },
+                                else viewModel.onChangeToLoginClick()
+                            },
                             isOpen = state.isLoginDialogShowing,
                             onDismiss = { viewModel.onLoginDialogDismissClick() },
                             onConfirm = { viewModel.onLoginDialogConfirmClick() }

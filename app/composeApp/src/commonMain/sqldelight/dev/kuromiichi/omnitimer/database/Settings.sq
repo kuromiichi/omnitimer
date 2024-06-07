@@ -1,0 +1,23 @@
+CREATE TABLE Settings (
+    name TEXT NOT NULL PRIMARY KEY,
+    value TEXT
+);
+
+selectSetting:
+SELECT value FROM Settings
+WHERE name = ?;
+
+updateSetting:
+UPDATE Settings
+SET value = ?
+WHERE name = ?;
+
+INSERT INTO Settings (name, value)
+VALUES ("inspection", "false"),
+       ("alert", "false"),
+       ("best", "false"),
+       ("mo3", "false"),
+       ("ao5", "false"),
+       ("ao12", "false"),
+       ("ao50", "false"),
+       ("ao100", "false");

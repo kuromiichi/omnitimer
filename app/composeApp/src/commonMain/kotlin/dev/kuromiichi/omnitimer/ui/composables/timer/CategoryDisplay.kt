@@ -1,4 +1,4 @@
-package ui.composables.timer
+package dev.kuromiichi.omnitimer.ui.composables.timer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

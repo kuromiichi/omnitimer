@@ -1,4 +1,4 @@
-package ui.screens.settings
+package dev.kuromiichi.omnitimer.ui.screens.settings
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package ui.navigation
+package dev.kuromiichi.omnitimer.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info

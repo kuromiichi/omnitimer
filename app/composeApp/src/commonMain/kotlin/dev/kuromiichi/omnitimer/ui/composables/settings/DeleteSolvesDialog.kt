@@ -1,4 +1,4 @@
-package ui.composables.settings
+package dev.kuromiichi.omnitimer.ui.composables.settings
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button

@@ -1,4 +1,4 @@
-package ui.screens.timer
+package dev.kuromiichi.omnitimer.ui.screens.timer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import ui.composables.timer.CategoryDisplay
-import ui.composables.timer.PenaltySelector
-import ui.composables.timer.ScrambleDisplay
-import ui.composables.timer.ScrambleImage
-import ui.composables.timer.StatsDisplay
-import ui.composables.timer.TimerArea
+import dev.kuromiichi.omnitimer.ui.composables.timer.CategoryDisplay
+import dev.kuromiichi.omnitimer.ui.composables.timer.PenaltySelector
+import dev.kuromiichi.omnitimer.ui.composables.timer.ScrambleDisplay
+import dev.kuromiichi.omnitimer.ui.composables.timer.ScrambleImage
+import dev.kuromiichi.omnitimer.ui.composables.timer.StatsDisplay
+import dev.kuromiichi.omnitimer.ui.composables.timer.TimerArea
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable

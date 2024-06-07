@@ -1,4 +1,4 @@
-package ui.theme
+package dev.kuromiichi.omnitimer.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
