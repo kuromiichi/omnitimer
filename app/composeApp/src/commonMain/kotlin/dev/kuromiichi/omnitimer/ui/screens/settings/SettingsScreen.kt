@@ -56,7 +56,7 @@ fun SettingsScreen() {
                 ) {
                     Text(
                         text =
-                        if (state.isUserLogged) "Logged in as ${state.username}"
+                        if (state.isUserLogged) "Logged in as ${state.name}"
                         else "Not logged in, try logging in using the button below"
                     )
                     if (state.isUserLogged) {
@@ -64,7 +64,7 @@ fun SettingsScreen() {
                             Text(text = "Logout")
                         }
                     } else {
-                        Button(onClick = { viewModel.onDialogLoginClick() }) {
+                        Button(onClick = { viewModel.onShowAccountDialogClick() }) {
                             Text(text = "Login")
                         }
                     }
@@ -73,8 +73,13 @@ fun SettingsScreen() {
                             isLogin = state.isLogin,
                             email = state.email,
                             password = state.password,
+                            passwordRepeat = state.passwordRepeat,
+                            name = state.name,
+                            errorMessage = state.errorMessage,
                             onEmailChange = { viewModel.onEmailChange(it) },
                             onPasswordChange = { viewModel.onPasswordChange(it) },
+                            onPasswordRepeatChange = { viewModel.onPasswordRepeatChange(it) },
+                            onNameChange = { viewModel.onNameChange(it) },
                             onTopButtonClicked = {
                                 if (state.isLogin) viewModel.onLoginClick()
                                 else viewModel.onRegisterClick()
@@ -84,8 +89,8 @@ fun SettingsScreen() {
                                 else viewModel.onChangeToLoginClick()
                             },
                             isOpen = state.isLoginDialogShowing,
-                            onDismiss = { viewModel.onLoginDialogDismissClick() },
-                            onConfirm = { viewModel.onLoginDialogConfirmClick() }
+                            onDismiss = { viewModel.onAccountDialogDismiss() },
+                            onConfirm = { viewModel.onAccountDialogDismiss() },
                         )
                     }
                 }

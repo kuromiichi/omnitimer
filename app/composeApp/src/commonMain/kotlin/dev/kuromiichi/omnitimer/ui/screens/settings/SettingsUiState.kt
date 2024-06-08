@@ -20,8 +20,10 @@ data class SettingsUiState(
     val isDeleteDialogShowing: Boolean = false,
     val email: String = "",
     val password: String = "",
-    val isLogin: Boolean = false,
+    val passwordRepeat: String = "",
+    val name: String = "",
+    val isLogin: Boolean = true,
     val isUserLogged: Boolean = false,
-    val username: String = "",
-    val isLoginDialogShowing: Boolean = false
+    val isLoginDialogShowing: Boolean = false,
+    val errorMessage: String = ""
 )
