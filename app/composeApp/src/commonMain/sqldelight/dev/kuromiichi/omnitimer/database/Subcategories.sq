@@ -5,7 +5,11 @@ CREATE TABLE Subcategories (
     FOREIGN KEY (category_id) REFERENCES Categories(id)
 );
 
-selectSubcategory:
+selectSubcategoryId:
+SELECT id FROM Subcategories
+WHERE category_id = ? AND name = ?;
+
+selectSubcategoriesByCategory:
 SELECT * FROM Subcategories
 WHERE category_id = ?;
 
