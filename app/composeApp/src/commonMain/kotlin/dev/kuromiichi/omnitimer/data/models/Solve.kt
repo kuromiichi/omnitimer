@@ -9,5 +9,6 @@ data class Solve(
     val scramble: Scramble,
     val status: Status,
     val date: LocalDateTime,
-    val subcategory: Subcategory
+    val subcategory: Subcategory,
+    val isArchived: Boolean
 )

@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS Solves (
     status TEXT NOT NULL,
     date TEXT NOT NULL,
     subcategory_id TEXT NOT NULL,
+    is_archived INTEGER NOT NULL,
     FOREIGN KEY (subcategory_id) REFERENCES Subcategories(id) ON DELETE CASCADE
 );
 
@@ -14,12 +15,12 @@ SELECT * FROM Solves
 WHERE subcategory_id = ?;
 
 insertSolve:
-INSERT INTO Solves (id, time, scramble, image, status, date, subcategory_id)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Solves (id, time, scramble, image, status, date, subcategory_id, is_archived)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
 updateSolve:
 UPDATE Solves
-SET time = ?, scramble = ?, image = ?, status = ?, date = ?, subcategory_id = ?
+SET time = ?, scramble = ?, image = ?, status = ?, date = ?, subcategory_id = ?, is_archived = ?
 WHERE id = ?;
 
 deleteSolve:

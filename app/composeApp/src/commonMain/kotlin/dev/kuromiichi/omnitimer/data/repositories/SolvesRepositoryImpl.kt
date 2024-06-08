@@ -35,7 +35,8 @@ object SolvesRepositoryImpl : SolvesRepository {
                     Scramble(it.scramble, it.image),
                     Status.valueOf(it.status),
                     LocalDateTime.parse(it.date),
-                    subcategory
+                    subcategory,
+                    it.is_archived == 1L
                 )
             }
     }
