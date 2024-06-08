@@ -1,4 +1,4 @@
-CREATE TABLE Settings (
+CREATE TABLE IF NOT EXISTS Settings (
     name TEXT NOT NULL PRIMARY KEY,
     value TEXT NOT NULL
 );
@@ -15,7 +15,7 @@ UPDATE Settings
 SET value = ?
 WHERE name = ?;
 
-INSERT INTO Settings (name, value)
+INSERT OR IGNORE INTO Settings (name, value)
 VALUES ("inspection", "false"),
        ("alert", "false"),
        ("best", "false"),

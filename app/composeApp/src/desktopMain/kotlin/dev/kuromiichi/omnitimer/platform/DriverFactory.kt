@@ -6,7 +6,8 @@ import dev.kuromiichi.omnitimer.database.OmniTimerDatabase
 
 actual class DriverFactory {
     actual fun createDriver(): SqlDriver {
-        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        val path = "omnitimer.db"
+        val driver = JdbcSqliteDriver("jdbc:sqlite:$path")
         OmniTimerDatabase.Schema.create(driver)
         return driver
     }

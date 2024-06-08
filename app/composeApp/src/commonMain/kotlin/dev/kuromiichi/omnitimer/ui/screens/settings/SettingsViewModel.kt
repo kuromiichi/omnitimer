@@ -1,20 +1,22 @@
 package dev.kuromiichi.omnitimer.ui.screens.settings
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import io.github.jan.supabase.exceptions.BadRequestRestException
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.builtin.Email
-import io.github.jan.supabase.gotrue.user.UserInfo
+import dev.kuromiichi.omnitimer.data.repositories.SettingsRepository
+import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.runBlocking
-import services.SupabaseService
 
 class SettingsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val supabase by lazy { SupabaseService.supabase }
+    private val settingsRepository: SettingsRepository = SettingsRepositoryImpl
+
+    init {
+        val settings = settingsRepository.getSettings().mapValues { it.value == "true" }
+        println(settings)
+        _uiState.value = _uiState.value.copy(isEnabled = settings)
+    }
 
     // Dialog-related functions
     fun onShowAccountDialogClick() {
@@ -56,38 +58,7 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun onRegisterClick() {
-        if (uiState.value.password != uiState.value.passwordRepeat) {
-            _uiState.value = _uiState.value.copy(errorMessage = "Passwords do not match.")
-            return
-        }
-
-        if (listOf(
-                uiState.value.email,
-                uiState.value.password,
-                uiState.value.passwordRepeat,
-                uiState.value.name
-            ).any { it.isBlank() }
-        ) {
-            _uiState.value = _uiState.value.copy(errorMessage = "Please fill all fields.")
-            return
-        }
-
-        var userInfo: UserInfo? = null
-        runBlocking {
-            try {
-                userInfo = supabase.auth.signUpWith(Email) {
-                    email = uiState.value.email
-                    password = uiState.value.password
-                }
-            } catch (e: BadRequestRestException) {
-                _uiState.value =
-                    _uiState.value.copy(errorMessage = e.error)
-            }
-        }
-
-        if (userInfo == null) return
-
-        _uiState.value = _uiState.value.copy(isUserLogged = true)
+        TODO("Not yet implemented")
     }
 
     fun onChangeToLoginClick() {
@@ -158,5 +129,8 @@ class SettingsViewModel : ViewModel() {
                     this[toggle] = !this[toggle]!!
                 }
         )
+
+        settingsRepository.setSetting(toggle, uiState.value.isEnabled[toggle]!!.toString())
+        println(settingsRepository.getSettings())
     }
 }

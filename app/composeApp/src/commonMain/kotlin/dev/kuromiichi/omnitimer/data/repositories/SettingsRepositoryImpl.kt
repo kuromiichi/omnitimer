@@ -18,7 +18,7 @@ object SettingsRepositoryImpl : SettingsRepository {
     }
 
     override fun setSetting(name: String, value: String) {
-        db.settingsQueries.updateSetting(name, value)
+        db.settingsQueries.updateSetting(value, name)
     }
 
 }
