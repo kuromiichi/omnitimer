@@ -11,32 +11,6 @@ import java.util.UUID
 object SolvesRepositoryImpl : SolvesRepository {
     private val db by lazy { DatabaseService.db }
 
-    init {
-        val categories = db.categoriesQueries.selectCategories().executeAsList()
-        if (categories.isEmpty()) {
-            listOf(
-                "TWO",
-                "THREE",
-                "FOUR",
-                "FIVE",
-                "SIX",
-                "SEVEN",
-                "PYRA",
-                "SQ1",
-                "MEGA",
-                "CLOCK",
-                "SKEWB"
-            ).forEach { name ->
-                db.categoriesQueries.insertCategory(name)
-                db.subcategoriesQueries.insertSubcategory(
-                    UUID.randomUUID().toString(),
-                    db.categoriesQueries.selectCategoryId(name).executeAsOne(),
-                    "Default"
-                )
-            }
-        }
-    }
-
     private fun getSubcategoryId(subcategory: Subcategory): String {
         val categoryId = db.categoriesQueries
             .selectCategoryId(subcategory.category.name)

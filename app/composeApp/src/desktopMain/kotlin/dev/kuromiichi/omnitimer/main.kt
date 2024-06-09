@@ -12,7 +12,10 @@ fun main() = application {
         title = "OmniTimer",
     ) {
         // Initialize database
-        DatabaseService.db = createDatabase(DriverFactory())
+        DatabaseService.apply {
+            db = createDatabase(DriverFactory())
+            init()
+        }
 
         App()
     }
