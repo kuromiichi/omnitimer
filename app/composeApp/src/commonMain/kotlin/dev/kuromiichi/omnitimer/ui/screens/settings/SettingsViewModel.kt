@@ -14,7 +14,6 @@ class SettingsViewModel : ViewModel() {
 
     init {
         val settings = settingsRepository.getSettings().mapValues { it.value == "true" }
-        println(settings)
         _uiState.value = _uiState.value.copy(isEnabled = settings)
     }
 
@@ -131,6 +130,5 @@ class SettingsViewModel : ViewModel() {
         )
 
         settingsRepository.setSetting(toggle, uiState.value.isEnabled[toggle]!!.toString())
-        println(settingsRepository.getSettings())
     }
 }

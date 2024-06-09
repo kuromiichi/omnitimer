@@ -91,7 +91,7 @@ fun TimerScreenPortrait(
             modifier = Modifier.height(IntrinsicSize.Max).fillMaxWidth()
         ) {
             StatsDisplay(
-                stats = mapOf(),
+                stats = state.stats,
                 modifier = Modifier.weight(1f).fillMaxHeight()
             )
             ScrambleImage(
@@ -139,7 +139,7 @@ fun TimerScreenLandscape(
                     .fillMaxHeight()
             ) {
                 StatsDisplay(
-                    stats = mapOf(),
+                    stats = state.stats,
                     modifier = Modifier.weight(2f).fillMaxWidth()
                 )
                 ScrambleImage(

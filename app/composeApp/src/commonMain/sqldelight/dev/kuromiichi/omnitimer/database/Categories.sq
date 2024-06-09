@@ -1,20 +1,14 @@
 CREATE TABLE IF NOT EXISTS Categories (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT UNIQUE NOT NULL
 );
+
+selectCategories:
+SELECT * FROM Categories;
+
+insertCategory:
+INSERT INTO Categories (name) VALUES (?);
 
 selectCategoryId:
 SELECT id FROM Categories
 WHERE name = ?;
-
-INSERT INTO Categories (name) VALUES ("2x2");
-INSERT INTO Categories (name) VALUES ("3x3");
-INSERT INTO Categories (name) VALUES ("4x4");
-INSERT INTO Categories (name) VALUES ("5x5");
-INSERT INTO Categories (name) VALUES ("6x6");
-INSERT INTO Categories (name) VALUES ("7x7");
-INSERT INTO Categories (name) VALUES ("Pyraminx");
-INSERT INTO Categories (name) VALUES ("Square-1");
-INSERT INTO Categories (name) VALUES ("Megaminx");
-INSERT INTO Categories (name) VALUES ("Clock");
-INSERT INTO Categories (name) VALUES ("Skewb");
