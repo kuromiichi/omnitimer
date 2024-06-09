@@ -66,4 +66,17 @@ object SolvesRepositoryImpl : SolvesRepository {
 
         return solves.sortedBy { it.time }.takeLast(n)
     }
+
+    override fun insertSolve(solve: Solve) {
+        db.solvesQueries.insertSolve(
+            id = solve.id.toString(),
+            time = solve.time,
+            scramble = solve.scramble.value,
+            image = solve.scramble.image,
+            status = solve.status.name,
+            date = solve.date.toString(),
+            subcategory_id = getSubcategoryId(solve.subcategory),
+            is_archived = if (solve.isArchived) 1L else 0L
+        )
+    }
 }

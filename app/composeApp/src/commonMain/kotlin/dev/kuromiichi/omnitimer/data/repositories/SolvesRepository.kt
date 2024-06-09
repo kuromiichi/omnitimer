@@ -7,4 +7,5 @@ interface SolvesRepository {
     fun getSolves(subcategory: Subcategory): List<Solve>
     fun getBestSolve(subcategory: Subcategory): Solve?
     fun getLastNSolves(n: Int, subcategory: Subcategory): List<Solve>
+    fun insertSolve(solve: Solve)
 }

@@ -15,6 +15,7 @@ import dev.kuromiichi.omnitimer.platform.toImageBitmap
 import dev.kuromiichi.omnitimer.services.StatsService
 import dev.kuromiichi.omnitimer.services.TNoodleService
 import dev.kuromiichi.omnitimer.utils.getTimeStringFromMillis
+import dev.kuromiichi.omnitimer.utils.now
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,6 +23,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.util.UUID
 
 class TimerViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
@@ -38,6 +41,7 @@ class TimerViewModel(
     private var startTime: Long = 0
     private var endTime: Long = 0
     private var isPlusTwo: Boolean = false
+    private var isDNF: Boolean = false
 
     private var lastSolve: Solve? = null
 
@@ -49,12 +53,7 @@ class TimerViewModel(
         generateStats()
     }
 
-    fun refreshScramble() {
-        val scramble = TNoodleService.getScramble(uiState.value.subcategory.category)
-        _uiState.value = _uiState.value.copy(scramble = scramble)
-    }
-
-    fun generateStats() {
+    private fun generateStats() {
         val stats = mutableMapOf<String, String>()
 
         if (settings["best"] == "true") {
@@ -92,7 +91,13 @@ class TimerViewModel(
                         .filter { !it.isArchived }
                 )
         }
+
         _uiState.value = _uiState.value.copy(stats = stats)
+    }
+
+    fun refreshScramble() {
+        val scramble = TNoodleService.getScramble(uiState.value.subcategory.category)
+        _uiState.value = _uiState.value.copy(scramble = scramble)
     }
 
     fun getImage(svg: String): @Composable () -> Unit {
@@ -106,13 +111,13 @@ class TimerViewModel(
     }
 
     fun getTime(): String {
-        return when (uiState.value.timerState) {
-            TimerState.Inspection -> {
-                val time = uiState.value.time / 1000 - 1
-                if (isPlusTwo) "+2" else "$time"
-            }
-
-            else -> {
+        return if (uiState.value.timerState == TimerState.Inspection) {
+            val time = uiState.value.time / 1000 - 1
+            if (isPlusTwo) "+2" else "$time"
+        } else {
+            if (isDNF) {
+                "DNF"
+            } else {
                 getTimeStringFromMillis(
                     if (uiState.value.timerState == TimerState.Running) {
                         (System.currentTimeMillis() - startTime)
@@ -127,6 +132,10 @@ class TimerViewModel(
     fun toggleTimerState() {
         when (uiState.value.timerState) {
             TimerState.Stopped -> {
+                isDNF = false
+                isPlusTwo = false
+                lastSolve = null
+
                 when (settings["inspection"]) {
                     "true" -> startInspection()
                     else -> startSolve()
@@ -149,10 +158,27 @@ class TimerViewModel(
         _uiState.value = _uiState.value.copy(timerState = TimerState.Inspection)
 
         inspectionJob = viewModelScope.launch(dispatcher) {
-            while (
-                uiState.value.timerState == TimerState.Inspection
-                && System.currentTimeMillis() < inspectionEnd
-            ) {
+            while (uiState.value.timerState == TimerState.Inspection && !isDNF) {
+                if (System.currentTimeMillis() >= inspectionEnd) {
+                    isDNF = true
+                    isPlusTwo = false
+                    _uiState.value = _uiState.value.copy(timerState = TimerState.Stopped)
+
+                    solvesRepository.insertSolve(
+                        Solve(
+                            id = UUID.randomUUID(),
+                            time = 0,
+                            scramble = uiState.value.scramble,
+                            status = Status.DNF,
+                            date = LocalDateTime.now(),
+                            subcategory = uiState.value.subcategory,
+                            isArchived = false
+                        )
+                    )
+
+                    refreshScramble()
+                    generateStats()
+                }
                 if (inspectionEnd - System.currentTimeMillis() < 2000) {
                     isPlusTwo = true
                 }
@@ -182,14 +208,34 @@ class TimerViewModel(
 
     private fun finishSolve() {
         endTime = System.currentTimeMillis()
+        val solveTime = endTime - startTime
         _uiState.value = _uiState.value.copy(
             timerState = TimerState.Stopped,
-            time = endTime - startTime
+            time = solveTime,
+            penalty = when {
+                isPlusTwo -> Status.PLUS_TWO
+                else -> Status.OK
+            }
         )
         timerJob?.cancel()
 
-        // TODO: save solve
-        // TODO: update stats
+        lastSolve = Solve(
+            id = UUID.randomUUID(),
+            time = solveTime,
+            scramble = uiState.value.scramble,
+            status = when {
+                isPlusTwo -> Status.PLUS_TWO
+                else -> Status.OK
+            },
+            date = LocalDateTime.now(),
+            subcategory = uiState.value.subcategory,
+            isArchived = false
+        )
+
+        lastSolve?.let { solvesRepository.insertSolve(it) }
+
+        refreshScramble()
+        generateStats()
     }
 
     fun changePenalty(penalty: Status) {
