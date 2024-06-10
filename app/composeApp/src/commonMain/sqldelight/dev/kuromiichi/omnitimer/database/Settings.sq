@@ -15,12 +15,6 @@ UPDATE Settings
 SET value = ?
 WHERE name = ?;
 
+insertSetting:
 INSERT OR IGNORE INTO Settings (name, value)
-VALUES ("inspection", "false"),
-       ("alert", "false"),
-       ("best", "false"),
-       ("mo3", "false"),
-       ("ao5", "false"),
-       ("ao12", "false"),
-       ("ao50", "false"),
-       ("ao100", "false");
+VALUES (?, ?);

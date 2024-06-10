@@ -7,7 +7,7 @@ selectCategories:
 SELECT * FROM Categories;
 
 insertCategory:
-INSERT INTO Categories (name) VALUES (?);
+INSERT OR IGNORE INTO Categories (name) VALUES (?);
 
 selectCategoryId:
 SELECT id FROM Categories

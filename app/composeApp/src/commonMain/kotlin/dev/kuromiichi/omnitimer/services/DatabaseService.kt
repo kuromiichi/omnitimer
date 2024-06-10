@@ -31,5 +31,17 @@ object DatabaseService {
                 )
             }
         }
+
+        val settings = db.settingsQueries.selectSettings().executeAsList()
+        if (settings.isEmpty()) {
+            db.settingsQueries.insertSetting("inspection", "false")
+            db.settingsQueries.insertSetting("alert", "false")
+            db.settingsQueries.insertSetting("best", "false")
+            db.settingsQueries.insertSetting("mo3", "false")
+            db.settingsQueries.insertSetting("ao5", "false")
+            db.settingsQueries.insertSetting("ao12", "false")
+            db.settingsQueries.insertSetting("ao50", "false")
+            db.settingsQueries.insertSetting("ao100", "false")
+        }
     }
 }

@@ -64,7 +64,7 @@ object SolvesRepositoryImpl : SolvesRepository {
     override fun getLastNSolves(n: Int, subcategory: Subcategory): List<Solve> {
         val solves = getSolvesInSubcategory(subcategory)
 
-        return solves.sortedBy { it.time }.takeLast(n)
+        return solves.sortedBy { it.date }.takeLast(n)
     }
 
     override fun insertSolve(solve: Solve) {
