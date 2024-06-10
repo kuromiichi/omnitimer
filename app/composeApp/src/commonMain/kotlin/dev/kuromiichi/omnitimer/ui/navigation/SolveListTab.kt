@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import dev.kuromiichi.omnitimer.ui.screens.list.ListScreen
 
 object SolveListTab : Tab {
     override val options: TabOptions
@@ -27,7 +28,7 @@ object SolveListTab : Tab {
     @Composable
     override fun Content() {
         Surface {
-            Text("Solve List")
+            ListScreen()
         }
     }
 }
