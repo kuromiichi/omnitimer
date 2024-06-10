@@ -163,3 +163,6 @@ sonarlint/
 
 # artifacts
 .idea/artifacts/
+
+# secret secrets!!!
+SupabaseConfig.kt

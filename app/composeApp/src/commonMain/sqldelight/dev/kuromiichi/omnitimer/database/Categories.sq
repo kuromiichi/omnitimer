@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS Categories (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL
+);
+
+selectCategories:
+SELECT * FROM Categories;
+
+insertCategory:
+INSERT INTO Categories (name) VALUES (?);
+
+selectCategoryId:
+SELECT id FROM Categories
+WHERE name = ?;

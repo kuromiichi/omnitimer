@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -26,6 +27,9 @@ kotlin {
 
             // AndroidSVG for SVG
             implementation(libs.androidsvg.aar)
+
+            // SQLDelight
+            implementation(libs.sqldelight.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -60,6 +64,9 @@ kotlin {
             // Batik for SVG
             implementation(libs.batik.transcoder)
             implementation(libs.batik.codec)
+
+            // SQLDelight
+            implementation(libs.sqldelight.jvm)
         }
     }
 }
@@ -106,6 +113,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "dev.kuromiichi.omnitimer"
             packageVersion = "1.0.0"
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("OmniTimerDatabase") {
+            packageName.set("dev.kuromiichi.omnitimer.database")
         }
     }
 }

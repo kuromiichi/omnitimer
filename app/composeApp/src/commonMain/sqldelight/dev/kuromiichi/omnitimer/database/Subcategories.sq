@@ -1,0 +1,27 @@
+CREATE TABLE IF NOT EXISTS Subcategories (
+    id TEXT NOT NULL PRIMARY KEY,
+    category_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES Categories(id)
+);
+
+selectSubcategoryId:
+SELECT id FROM Subcategories
+WHERE category_id = ? AND name = ?;
+
+selectSubcategoriesByCategory:
+SELECT * FROM Subcategories
+WHERE category_id = ?;
+
+insertSubcategory:
+INSERT INTO Subcategories (id, category_id, name)
+VALUES (?, ?, ?);
+
+updateSubcategory:
+UPDATE Subcategories
+SET name = ?
+WHERE id = ?;
+
+deleteSubcategory:
+DELETE FROM Subcategories
+WHERE id = ?;
