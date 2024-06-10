@@ -37,6 +37,7 @@ class TimerViewModel(
     private val statsService = StatsService
 
     private var settings: Map<String, String> = settingsRepository.getSettings()
+    val inspectionEnabled = settings["inspection"] == "true"
 
     private var startTime: Long = 0
     private var endTime: Long = 0
