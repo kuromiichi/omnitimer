@@ -3,7 +3,6 @@ package dev.kuromiichi.omnitimer.ui.screens.list
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.kuromiichi.omnitimer.data.models.Category
-import dev.kuromiichi.omnitimer.data.models.Scramble
 import dev.kuromiichi.omnitimer.data.models.Solve
 import dev.kuromiichi.omnitimer.data.models.Status
 import dev.kuromiichi.omnitimer.data.models.Subcategory

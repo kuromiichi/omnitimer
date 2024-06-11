@@ -43,8 +43,9 @@ object StatsService {
     fun getMo3(solves: List<Solve>): String {
         if (solves.size < 3) return "-"
         if (solves.any { it.status == Status.DNF }) return "DNF"
-        val mean = solves.map { if (it.status == Status.PLUS_TWO) it.copy(time = it.time + 2000) else it }
-            .map { it.time }.average().toLong()
+        val mean = solves.map {
+            if (it.status == Status.PLUS_TWO) it.copy(time = it.time + 2000) else it
+        }.map { it.time }.average().toLong()
         return getTimeStringFromMillis(mean)
     }
 

@@ -24,4 +24,5 @@ fun getTimeStringFromMillis(millis: Long): String {
     }
 }
 
-fun LocalDateTime.Companion.now() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+fun LocalDateTime.Companion.now() =
+    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
