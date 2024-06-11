@@ -1,5 +1,6 @@
-package dev.kuromiichi.omnitimer.ui.composables.timer
+package dev.kuromiichi.omnitimer.ui.composables.common
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,19 +17,22 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CategoryDisplay(
+    modifier: Modifier = Modifier,
     categoryName: String,
     subcategoryName: String,
-    modifier: Modifier = Modifier
+    onCategoryClick: () -> Unit,
+    onSubcategoryClick: () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
     ) {
         Surface(
+            modifier = Modifier.weight(2f).fillMaxHeight()
+                .clickable { onCategoryClick() },
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.tertiary,
-            shadowElevation = 4.dp,
-            modifier = Modifier.weight(2f).fillMaxHeight()
+            shadowElevation = 4.dp
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
@@ -38,10 +42,11 @@ fun CategoryDisplay(
             }
         }
         Surface(
+            modifier = Modifier.weight(3f).fillMaxHeight()
+                .clickable { onSubcategoryClick() },
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.tertiary,
-            shadowElevation = 4.dp,
-            modifier = Modifier.weight(3f).fillMaxHeight()
+            shadowElevation = 4.dp
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(

@@ -6,6 +6,10 @@ CREATE TABLE IF NOT EXISTS Categories (
 selectCategories:
 SELECT * FROM Categories;
 
+selectCategory:
+SELECT name FROM Categories
+WHERE id = ?;
+
 insertCategory:
 INSERT OR IGNORE INTO Categories (name) VALUES (?);
 

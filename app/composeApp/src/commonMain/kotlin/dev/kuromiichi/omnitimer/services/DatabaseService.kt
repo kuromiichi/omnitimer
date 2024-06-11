@@ -40,6 +40,13 @@ object DatabaseService {
             db.settingsQueries.insertSetting("ao12", "false")
             db.settingsQueries.insertSetting("ao50", "false")
             db.settingsQueries.insertSetting("ao100", "false")
+            db.settingsQueries.insertSetting(
+                "lastCategory",
+                db.subcategoriesQueries
+                    .selectSubcategoriesByCategory(2)
+                    .executeAsOne()
+                    .id
+            )
         }
     }
 }

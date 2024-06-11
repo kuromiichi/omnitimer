@@ -2,47 +2,24 @@ package dev.kuromiichi.omnitimer.ui.screens.list
 
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import dev.kuromiichi.omnitimer.data.models.Category
 import dev.kuromiichi.omnitimer.data.models.Solve
-import dev.kuromiichi.omnitimer.data.models.Status
-import dev.kuromiichi.omnitimer.data.models.Subcategory
-import dev.kuromiichi.omnitimer.services.TNoodleService
+import dev.kuromiichi.omnitimer.data.repositories.SolvesRepository
+import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.datetime.LocalDateTime
-import java.util.UUID
 
 class ListViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ListUiState())
     val uiState = _uiState.asStateFlow()
 
-    var solves = listOf<Solve>(
-        Solve(
-            UUID.randomUUID(),
-            2345,
-            TNoodleService.getScramble(Category.THREE),
-            Status.OK,
-            LocalDateTime.parse("2022-01-01T00:00:00"),
-            Subcategory("Normal", Category.THREE),
-            false
-        ),
-        Solve(
-            UUID.randomUUID(),
-            2345,
-            TNoodleService.getScramble(Category.THREE),
-            Status.OK,
-            LocalDateTime.parse("2022-01-01T00:00:00"),
-            Subcategory("Normal", Category.THREE),
-            false
-        ),
-        Solve(
-            UUID.randomUUID(),
-            2345,
-            TNoodleService.getScramble(Category.THREE),
-            Status.OK,
-            LocalDateTime.parse("2022-01-01T00:00:00"),
-            Subcategory("Normal", Category.THREE),
-            false
-        ),
-    )
+    private val solvesRepository: SolvesRepository = SolvesRepositoryImpl
+    val solves = listOf<Solve>()
+
+    init {
+        updateSolves()
+    }
+
+    private fun updateSolves() {
+        val solves = solvesRepository.getSessionSolves(uiState.value.subcategory)
+    }
 }

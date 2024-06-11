@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -39,7 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import dev.kuromiichi.omnitimer.ui.composables.timer.CategoryDisplay
+import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDialog
+import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDisplay
 import dev.kuromiichi.omnitimer.ui.composables.timer.PenaltySelector
 import dev.kuromiichi.omnitimer.ui.composables.timer.ScrambleDisplay
 import dev.kuromiichi.omnitimer.ui.composables.timer.ScrambleImage
@@ -80,10 +85,38 @@ fun TimerScreenPortrait(
         modifier = Modifier.padding(16.dp)
     ) {
         CategoryDisplay(
+            modifier = Modifier.height(IntrinsicSize.Max),
             categoryName = state.subcategory.category.displayName,
             subcategoryName = state.subcategory.name,
-            modifier = Modifier.height(IntrinsicSize.Max)
+            onCategoryClick = { viewModel.onCategorySelectorClick() },
+            onSubcategoryClick = { viewModel.onSubcategorySelectorClick() }
         )
+        if (state.isCategoryDialogShowing) {
+            CategoryDialog(
+                elements = viewModel.categories,
+                title = "Select category",
+                onClick = { viewModel.onCategorySelected(it) },
+                onDismiss = { viewModel.onCategoryDialogDismiss() },
+            )
+        }
+
+        if (state.isSubcategoryDialogShowing) {
+            CategoryDialog(
+                elements = viewModel.getSubcategories(),
+                title = "Select subcategory",
+                onClick = { viewModel.onSubcategorySelected(it) },
+                onDismiss = { viewModel.onSubcategoryDialogDismiss() },
+                iconButton = {
+                    IconButton(onClick = { viewModel.onEditSubcategoryClick() }) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit subcategory"
+                        )
+                    }
+                }
+            )
+        }
+
         ScrambleDisplay(
             scramble = state.scramble.value,
             onRefreshClick = {
@@ -191,10 +224,37 @@ fun TimerScreenLandscape(
             modifier = Modifier.height(IntrinsicSize.Max).fillMaxWidth()
         ) {
             CategoryDisplay(
+                modifier = Modifier.weight(1f).fillMaxHeight(),
                 categoryName = state.subcategory.category.displayName,
                 subcategoryName = state.subcategory.name,
-                modifier = Modifier.weight(1f).fillMaxHeight()
+                onCategoryClick = { viewModel.onCategorySelectorClick() },
+                onSubcategoryClick = { viewModel.onSubcategorySelectorClick() }
             )
+            if (state.isCategoryDialogShowing) {
+                CategoryDialog(
+                    elements = viewModel.categories,
+                    title = "Select category",
+                    onClick = { viewModel.onCategorySelected(it) },
+                    onDismiss = { viewModel.onCategoryDialogDismiss() },
+                )
+            }
+
+            if (state.isSubcategoryDialogShowing) {
+                CategoryDialog(
+                    elements = viewModel.getSubcategories(),
+                    title = "Select subcategory",
+                    onClick = { viewModel.onSubcategorySelected(it) },
+                    onDismiss = { viewModel.onSubcategoryDialogDismiss() },
+                    iconButton = {
+                        IconButton(onClick = { viewModel.onEditSubcategoryClick() }) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit subcategory"
+                            )
+                        }
+                    }
+                )
+            }
             ScrambleDisplay(
                 scramble = state.scramble.value,
                 onRefreshClick = {

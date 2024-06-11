@@ -9,6 +9,10 @@ selectSubcategoryId:
 SELECT id FROM Subcategories
 WHERE category_id = ? AND name = ?;
 
+selectSubcategory:
+SELECT * FROM Subcategories
+WHERE id = ?;
+
 selectSubcategoriesByCategory:
 SELECT * FROM Subcategories
 WHERE category_id = ?;
