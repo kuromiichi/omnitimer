@@ -9,4 +9,5 @@ interface SolvesRepository {
     fun getLastNSolves(n: Int, subcategory: Subcategory): List<Solve>
     fun insertSolve(solve: Solve)
     fun updateSolve(solve: Solve)
+    fun deleteSolve(solve: Solve)
 }

@@ -92,4 +92,8 @@ object SolvesRepositoryImpl : SolvesRepository {
             id = solve.id.toString()
         )
     }
+
+    override fun deleteSolve(solve: Solve) {
+        db.solvesQueries.deleteSolve(id = solve.id.toString())
+    }
 }

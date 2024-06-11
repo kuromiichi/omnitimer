@@ -259,7 +259,13 @@ class TimerViewModel(
     fun deleteLastSolve() {
         if (lastSolve == null) return
 
-        // TODO: delete from repository
+        lastSolve?.let { solvesRepository.deleteSolve(it) }
+        lastSolve = null
+        _uiState.value = _uiState.value.copy(
+            penalty = Status.OK,
+            timerText = getTime()
+        )
+        generateStats()
     }
 
     enum class TimerState {
