@@ -1,5 +1,10 @@
 package dev.kuromiichi.omnitimer.utils
 
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
 fun getTimeStringFromMillis(millis: Long): String {
     val hours = millis / (1000 * 60 * 60)
     val minutes = (millis / (1000 * 60)) % 60
@@ -18,3 +23,6 @@ fun getTimeStringFromMillis(millis: Long): String {
         "${seconds}.${hundredths.toString().padStart(2, '0')}"
     }
 }
+
+fun LocalDateTime.Companion.now() =
+    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())

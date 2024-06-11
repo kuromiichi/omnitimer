@@ -14,7 +14,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // Initialize database
-        DatabaseService.db = createDatabase(DriverFactory(this))
+        DatabaseService.apply {
+            db = createDatabase(DriverFactory(this@MainActivity))
+            init()
+        }
 
         setContent {
             App()

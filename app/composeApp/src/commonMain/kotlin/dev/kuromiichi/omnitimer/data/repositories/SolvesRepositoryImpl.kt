@@ -11,32 +11,6 @@ import java.util.UUID
 object SolvesRepositoryImpl : SolvesRepository {
     private val db by lazy { DatabaseService.db }
 
-    init {
-        val categories = db.categoriesQueries.selectCategories().executeAsList()
-        if (categories.isEmpty()) {
-            listOf(
-                "TWO",
-                "THREE",
-                "FOUR",
-                "FIVE",
-                "SIX",
-                "SEVEN",
-                "PYRA",
-                "SQ1",
-                "MEGA",
-                "CLOCK",
-                "SKEWB"
-            ).forEach { name ->
-                db.categoriesQueries.insertCategory(name)
-                db.subcategoriesQueries.insertSubcategory(
-                    UUID.randomUUID().toString(),
-                    db.categoriesQueries.selectCategoryId(name).executeAsOne(),
-                    "Default"
-                )
-            }
-        }
-    }
-
     private fun getSubcategoryId(subcategory: Subcategory): String {
         val categoryId = db.categoriesQueries
             .selectCategoryId(subcategory.category.name)
@@ -69,13 +43,14 @@ object SolvesRepositoryImpl : SolvesRepository {
 
     override fun getSolves(subcategory: Subcategory) = getSolvesInSubcategory(subcategory)
 
-    override fun getBestSolve(subcategory: Subcategory): Solve? {
+    override fun getSessionBestSolve(subcategory: Subcategory): Solve? {
         val solves = getSolvesInSubcategory(subcategory)
 
         if (solves.isEmpty()) return null
         if (solves.all { it.status == Status.DNF }) return solves.first()
 
         val bestSolve = solves
+            .filter { !it.isArchived }
             .filter { it.status != Status.DNF }
             .map {
                 when (it.status) {
@@ -87,9 +62,39 @@ object SolvesRepositoryImpl : SolvesRepository {
         return bestSolve
     }
 
-    override fun getLastNSolves(n: Int, subcategory: Subcategory): List<Solve> {
+    override fun getSessionLastNSolves(n: Int, subcategory: Subcategory): List<Solve> {
         val solves = getSolvesInSubcategory(subcategory)
 
-        return solves.sortedBy { it.time }.takeLast(n)
+        return solves.filter { !it.isArchived }.sortedBy { it.date }.takeLast(n)
+    }
+
+    override fun insertSolve(solve: Solve) {
+        db.solvesQueries.insertSolve(
+            id = solve.id.toString(),
+            time = solve.time,
+            scramble = solve.scramble.value,
+            image = solve.scramble.image,
+            status = solve.status.name,
+            date = solve.date.toString(),
+            subcategory_id = getSubcategoryId(solve.subcategory),
+            is_archived = if (solve.isArchived) 1L else 0L
+        )
+    }
+
+    override fun updateSolve(solve: Solve) {
+        db.solvesQueries.updateSolve(
+            time = solve.time,
+            scramble = solve.scramble.value,
+            image = solve.scramble.image,
+            status = solve.status.name,
+            date = solve.date.toString(),
+            subcategory_id = getSubcategoryId(solve.subcategory),
+            is_archived = if (solve.isArchived) 1L else 0L,
+            id = solve.id.toString()
+        )
+    }
+
+    override fun deleteSolve(solve: Solve) {
+        db.solvesQueries.deleteSolve(id = solve.id.toString())
     }
 }

@@ -13,7 +13,7 @@ fun SettingsToggle(
     title: String,
     enabled: Boolean,
     onToggle: (Boolean) -> Unit
-){
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
