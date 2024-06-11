@@ -60,36 +60,36 @@ class TimerViewModel(
 
         if (settings["best"] == "true") {
             stats["Best time:"] =
-                statsService.getBest(solvesRepository.getBestSolve(uiState.value.subcategory))
+                statsService.getBest(solvesRepository.getSessionBestSolve(uiState.value.subcategory))
         }
         if (settings["mo3"] == "true") {
             stats["mo3:"] = statsService.getMo3(
-                solvesRepository.getLastNSolves(3, uiState.value.subcategory)
+                solvesRepository.getSessionLastNSolves(3, uiState.value.subcategory)
                     .filter { !it.isArchived }
             )
         }
         if (settings["ao5"] == "true") {
             stats["ao5:"] = statsService.getAo5(
-                solvesRepository.getLastNSolves(5, uiState.value.subcategory)
+                solvesRepository.getSessionLastNSolves(5, uiState.value.subcategory)
                     .filter { !it.isArchived }
             )
         }
         if (settings["ao12"] == "true") {
             stats["ao12:"] = statsService.getAo12(
-                solvesRepository.getLastNSolves(12, uiState.value.subcategory)
+                solvesRepository.getSessionLastNSolves(12, uiState.value.subcategory)
                     .filter { !it.isArchived }
             )
         }
         if (settings["ao50"] == "true") {
             stats["ao50:"] = statsService.getAo50(
-                solvesRepository.getLastNSolves(50, uiState.value.subcategory)
+                solvesRepository.getSessionLastNSolves(50, uiState.value.subcategory)
                     .filter { !it.isArchived }
             )
         }
         if (settings["ao100"] == "true") {
             stats["ao100:"] =
                 statsService.getAo100(
-                    solvesRepository.getLastNSolves(100, uiState.value.subcategory)
+                    solvesRepository.getSessionLastNSolves(100, uiState.value.subcategory)
                         .filter { !it.isArchived }
                 )
         }

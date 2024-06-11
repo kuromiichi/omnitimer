@@ -43,13 +43,14 @@ object SolvesRepositoryImpl : SolvesRepository {
 
     override fun getSolves(subcategory: Subcategory) = getSolvesInSubcategory(subcategory)
 
-    override fun getBestSolve(subcategory: Subcategory): Solve? {
+    override fun getSessionBestSolve(subcategory: Subcategory): Solve? {
         val solves = getSolvesInSubcategory(subcategory)
 
         if (solves.isEmpty()) return null
         if (solves.all { it.status == Status.DNF }) return solves.first()
 
         val bestSolve = solves
+            .filter { !it.isArchived }
             .filter { it.status != Status.DNF }
             .map {
                 when (it.status) {
@@ -61,10 +62,10 @@ object SolvesRepositoryImpl : SolvesRepository {
         return bestSolve
     }
 
-    override fun getLastNSolves(n: Int, subcategory: Subcategory): List<Solve> {
+    override fun getSessionLastNSolves(n: Int, subcategory: Subcategory): List<Solve> {
         val solves = getSolvesInSubcategory(subcategory)
 
-        return solves.sortedBy { it.date }.takeLast(n)
+        return solves.filter { !it.isArchived }.sortedBy { it.date }.takeLast(n)
     }
 
     override fun insertSolve(solve: Solve) {
