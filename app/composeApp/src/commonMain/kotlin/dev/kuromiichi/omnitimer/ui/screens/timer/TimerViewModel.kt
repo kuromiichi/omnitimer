@@ -39,6 +39,7 @@ class TimerViewModel(
     private var settings: Map<String, String> = settingsRepository.getSettings()
     val inspectionEnabled = settings["inspection"] == "true"
 
+    private var time: Long = 0
     private var startTime: Long = 0
     private var endTime: Long = 0
     private var isPlusTwo: Boolean = false
@@ -96,6 +97,32 @@ class TimerViewModel(
         _uiState.value = _uiState.value.copy(stats = stats)
     }
 
+    private fun setTime(time: Long) {
+        this.time = time
+        _uiState.value = _uiState.value.copy(timerText = getTime())
+    }
+
+    private fun getTime(): String {
+        val currentSolve = lastSolve
+        return when (uiState.value.timerState) {
+            TimerState.Stopped -> if (currentSolve != null) {
+                when (currentSolve.status) {
+                    Status.PLUS_TWO -> "${getTimeStringFromMillis(currentSolve.time + 2000)}+"
+                    Status.DNF -> "DNF (${getTimeStringFromMillis(currentSolve.time)})"
+                    else -> getTimeStringFromMillis(currentSolve.time)
+                }
+            } else {
+                if (isDNF) "DNF" else "0.00"
+            }
+
+            TimerState.Inspection -> {
+                if (isPlusTwo) "+2" else "${time / 1000 - 1}"
+            }
+
+            TimerState.Running -> getTimeStringFromMillis(System.currentTimeMillis() - startTime)
+        }
+    }
+
     fun refreshScramble() {
         val scramble = TNoodleService.getScramble(uiState.value.subcategory.category)
         _uiState.value = _uiState.value.copy(scramble = scramble)
@@ -108,25 +135,6 @@ class TimerViewModel(
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize()
             )
-        }
-    }
-
-    fun getTime(): String {
-        return if (uiState.value.timerState == TimerState.Inspection) {
-            val time = uiState.value.time / 1000 - 1
-            if (isPlusTwo) "+2" else "$time"
-        } else {
-            if (isDNF) {
-                "DNF"
-            } else {
-                getTimeStringFromMillis(
-                    if (uiState.value.timerState == TimerState.Running) {
-                        (System.currentTimeMillis() - startTime)
-                    } else {
-                        (endTime - startTime)
-                    }
-                )
-            }
         }
     }
 
@@ -183,8 +191,7 @@ class TimerViewModel(
                 if (inspectionEnd - System.currentTimeMillis() < 2000) {
                     isPlusTwo = true
                 }
-                _uiState.value = _uiState.value
-                    .copy(time = inspectionEnd - System.currentTimeMillis())
+                setTime(inspectionEnd - System.currentTimeMillis())
                 delay(10)
             }
         }
@@ -200,8 +207,7 @@ class TimerViewModel(
 
         timerJob = viewModelScope.launch(dispatcher) {
             while (uiState.value.timerState == TimerState.Running) {
-                _uiState.value = _uiState.value
-                    .copy(time = System.currentTimeMillis() - startTime)
+                setTime(System.currentTimeMillis() - startTime)
                 delay(10)
             }
         }
@@ -210,9 +216,9 @@ class TimerViewModel(
     private fun finishSolve() {
         endTime = System.currentTimeMillis()
         val solveTime = endTime - startTime
+        setTime(solveTime)
         _uiState.value = _uiState.value.copy(
             timerState = TimerState.Stopped,
-            time = solveTime,
             penalty = when {
                 isPlusTwo -> Status.PLUS_TWO
                 else -> Status.OK
@@ -240,9 +246,14 @@ class TimerViewModel(
     }
 
     fun changePenalty(penalty: Status) {
-        _uiState.value = _uiState.value.copy(penalty = penalty)
+        lastSolve = lastSolve?.copy(status = penalty)
+        lastSolve?.let { solvesRepository.updateSolve(it.copy(status = penalty)) }
 
-        // TODO: update repository
+        _uiState.value = _uiState.value.copy(
+            penalty = penalty,
+            timerText = getTime()
+        )
+        generateStats()
     }
 
     fun deleteLastSolve() {

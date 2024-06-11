@@ -79,4 +79,17 @@ object SolvesRepositoryImpl : SolvesRepository {
             is_archived = if (solve.isArchived) 1L else 0L
         )
     }
+
+    override fun updateSolve(solve: Solve) {
+        db.solvesQueries.updateSolve(
+            time = solve.time,
+            scramble = solve.scramble.value,
+            image = solve.scramble.image,
+            status = solve.status.name,
+            date = solve.date.toString(),
+            subcategory_id = getSubcategoryId(solve.subcategory),
+            is_archived = if (solve.isArchived) 1L else 0L,
+            id = solve.id.toString()
+        )
+    }
 }

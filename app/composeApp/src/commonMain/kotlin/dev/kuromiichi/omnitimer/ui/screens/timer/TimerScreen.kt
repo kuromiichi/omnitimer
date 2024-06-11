@@ -95,7 +95,7 @@ fun TimerScreenPortrait(
         var ignoreKeyUp by remember { mutableStateOf(false) }
         var ignoreKeyDown by remember { mutableStateOf(false) }
         TimerArea(
-            time = viewModel.getTime(),
+            time = state.timerText,
             fontSize = timerFontSize,
             onSurfaceClick = { viewModel.toggleTimerState() },
             modifier = Modifier.weight(1f).fillMaxWidth()
@@ -231,7 +231,7 @@ fun TimerScreenLandscape(
                 var ignoreKeyUp by remember { mutableStateOf(false) }
                 var ignoreKeyDown by remember { mutableStateOf(false) }
                 TimerArea(
-                    time = viewModel.getTime(),
+                    time = state.timerText,
                     fontSize = timerFontSize,
                     onSurfaceClick = { viewModel.toggleTimerState() },
                     modifier = Modifier.fillMaxSize()
