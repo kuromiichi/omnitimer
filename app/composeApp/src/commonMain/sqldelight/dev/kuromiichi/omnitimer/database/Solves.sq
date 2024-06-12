@@ -26,3 +26,6 @@ WHERE id = ?;
 deleteSolve:
 DELETE FROM Solves
 WHERE id = ?;
+
+deleteAllSolves:
+DELETE FROM Solves;
