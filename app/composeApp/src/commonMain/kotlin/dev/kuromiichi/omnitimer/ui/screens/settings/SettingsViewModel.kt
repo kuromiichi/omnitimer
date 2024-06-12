@@ -7,6 +7,8 @@ import dev.kuromiichi.omnitimer.data.dto.toSolve
 import dev.kuromiichi.omnitimer.data.models.Solve
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepository
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
+import dev.kuromiichi.omnitimer.data.repositories.SolvesRepository
+import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +24,7 @@ class SettingsViewModel : ViewModel() {
     val uiState = _uiState.asStateFlow()
 
     private val settingsRepository: SettingsRepository = SettingsRepositoryImpl
+    private val solvesRepository: SolvesRepository = SolvesRepositoryImpl
 
     init {
         val settings = settingsRepository.getSettings().mapValues { it.value == "true" }
@@ -53,6 +56,7 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun onDeleteSolvesConfirmClick() {
+        solvesRepository.deleteAllSolves()
         _uiState.value = _uiState.value.copy(isDeleteDialogShowing = false)
     }
 

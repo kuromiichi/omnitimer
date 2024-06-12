@@ -39,7 +39,7 @@ object SolvesRepositoryImpl : SolvesRepository {
         val subcategoryId = getSubcategoryId(subcategory)
 
         return db.solvesQueries
-            .selectSolves(subcategoryId)
+            .selectSolvesByCategory(subcategoryId)
             .executeAsList()
             .map {
                 Solve(
@@ -126,5 +126,9 @@ object SolvesRepositoryImpl : SolvesRepository {
                 it.is_archived == 1L
             )
         }
+    }
+
+    override fun deleteAllSolves() {
+        db.solvesQueries.deleteAllSolves()
     }
 }
