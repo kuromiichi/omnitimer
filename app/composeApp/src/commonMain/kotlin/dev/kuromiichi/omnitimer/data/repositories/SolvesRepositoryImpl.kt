@@ -26,7 +26,7 @@ object SolvesRepositoryImpl : SolvesRepository {
         val subcategoryId = getSubcategoryId(subcategory)
 
         return db.solvesQueries
-            .selectSolves(subcategoryId)
+            .selectSolvesByCategory(subcategoryId)
             .executeAsList()
             .map {
                 Solve(

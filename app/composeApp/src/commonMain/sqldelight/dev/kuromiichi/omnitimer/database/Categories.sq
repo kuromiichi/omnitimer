@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Categories (
 selectCategories:
 SELECT * FROM Categories;
 
-selectCategory:
+selectCategoryById:
 SELECT name FROM Categories
 WHERE id = ?;
 
