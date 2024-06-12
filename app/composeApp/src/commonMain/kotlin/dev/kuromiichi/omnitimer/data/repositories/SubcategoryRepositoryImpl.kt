@@ -24,7 +24,7 @@ object SubcategoryRepositoryImpl : SubcategoriesRepository {
     override fun selectSubcategory(id: UUID): Subcategory {
         val subcategory = db.subcategoriesQueries.selectSubcategory(id.toString()).executeAsOne()
         val categoryName =
-            db.categoriesQueries.selectCategory(subcategory.category_id).executeAsOne()
+            db.categoriesQueries.selectCategoryById(subcategory.category_id).executeAsOne()
         return Subcategory(
             id,
             subcategory.name,

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Solves (
     FOREIGN KEY (subcategory_id) REFERENCES Subcategories(id) ON DELETE CASCADE
 );
 
-selectSolves:
+selectSolvesByCategory:
 SELECT * FROM Solves
 WHERE subcategory_id = ?;
 
@@ -26,3 +26,6 @@ WHERE id = ?;
 deleteSolve:
 DELETE FROM Solves
 WHERE id = ?;
+
+deleteAllSolves:
+DELETE FROM Solves;

@@ -26,7 +26,7 @@ object SolvesRepositoryImpl : SolvesRepository {
         val subcategoryId = getSubcategoryId(subcategory)
 
         return db.solvesQueries
-            .selectSolves(subcategoryId)
+            .selectSolvesByCategory(subcategoryId)
             .executeAsList()
             .map {
                 Solve(
@@ -99,5 +99,9 @@ object SolvesRepositoryImpl : SolvesRepository {
 
     override fun deleteSolve(solve: Solve) {
         db.solvesQueries.deleteSolve(id = solve.id.toString())
+    }
+
+    override fun deleteAllSolves() {
+        db.solvesQueries.deleteAllSolves()
     }
 }
