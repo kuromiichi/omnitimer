@@ -132,7 +132,11 @@ fun ListScreen() {
                             image = viewModel.solves[solve].scramble.image,
                             selectedPenalty = viewModel.solves[solve].status,
                             isPortrait = isPortrait,
-                            onPenaltySelected = {},
+                            onPenaltySelected = {
+                                viewModel.changePenalty(solve, it)
+                                isExpanded = !isExpanded
+                                isExpanded = !isExpanded
+                            },
                             onDeleteClick = {},
                             onArchiveClick = {}
                         )

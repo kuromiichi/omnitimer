@@ -4,6 +4,7 @@ package dev.kuromiichi.omnitimer.ui.screens.list
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.kuromiichi.omnitimer.data.models.Category
 import dev.kuromiichi.omnitimer.data.models.Solve
+import dev.kuromiichi.omnitimer.data.models.Status
 import dev.kuromiichi.omnitimer.data.models.Subcategory
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepository
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
@@ -27,12 +28,12 @@ class ListViewModel : ViewModel() {
 
     val categories = Category.entries.map { it.displayName }
 
-    var solves = listOf<Solve>()
+    var solves = mutableListOf<Solve>()
 
     init {
         _uiState.value = _uiState.value.copy(subcategory = getLastSubcategory())
         getSubcategories()
-        updateSolves()
+        refreshSolves()
     }
 
     fun getSubcategories() =
@@ -45,9 +46,10 @@ class ListViewModel : ViewModel() {
         } ?: subcategoryRepository.selectSubcategoriesByCategory(Category.THREE).first()
     }
 
-    private fun updateSolves() {
+    private fun refreshSolves() {
         solves =
             solvesRepository.getSessionSolves(uiState.value.subcategory).filter { !it.isArchived }
+                .toMutableList()
     }
 
     fun onCategorySelectorClick() {
@@ -77,7 +79,7 @@ class ListViewModel : ViewModel() {
             subcategory = subcategory,
             isCategoryDialogShowing = false
         )
-        updateSolves()
+        refreshSolves()
     }
 
     fun onSubcategorySelected(subcategoryName: String) {
@@ -91,7 +93,7 @@ class ListViewModel : ViewModel() {
             subcategory = subcategory,
             isSubcategoryDialogShowing = false
         )
-        updateSolves()
+        refreshSolves()
     }
 
     fun onCreateSubcategoryClick() {
@@ -183,5 +185,12 @@ class ListViewModel : ViewModel() {
         }
 
         _uiState.value = _uiState.value.copy(isEditSubcategoryDialogShowing = false)
+    }
+
+    fun changePenalty(solveIdx: Int, penalty: Status) {
+        val solve = solves[solveIdx].copy(status = penalty)
+        solves[solveIdx] = solve
+        solvesRepository.updateSolve(solve)
+        refreshSolves()
     }
 }
