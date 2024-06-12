@@ -6,8 +6,13 @@ import java.util.UUID
 
 
 data class ListUiState(
-    val category: Category = Category.THREE,
     val subcategory: Subcategory = Subcategory(UUID.randomUUID(), "Default", Category.THREE),
     val sesionOnly: Boolean = false,
-    val archivedOnly: Boolean = false
+    val archivedOnly: Boolean = false,
+    val isCategoryDialogShowing: Boolean = false,
+    val isSubcategoryDialogShowing: Boolean = false,
+    val isCreateSubcategoryDialogShowing: Boolean = false,
+    val isEditSubcategoryDialogShowing: Boolean = false,
+    val originalSubcategoryName: String = "",
+    val subcategoryName: String = ""
 )

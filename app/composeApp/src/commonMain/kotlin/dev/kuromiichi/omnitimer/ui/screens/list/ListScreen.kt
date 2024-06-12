@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -24,9 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDialog
 import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDisplay
+import dev.kuromiichi.omnitimer.ui.composables.common.EditSubcategoryDialog
 import dev.kuromiichi.omnitimer.ui.composables.list.ListContent
 import dev.kuromiichi.omnitimer.ui.composables.list.ListItem
+import dev.kuromiichi.omnitimer.utils.getTimeStringFromMillis
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -49,11 +54,64 @@ fun ListScreen() {
         ) {
             CategoryDisplay(
                 modifier = Modifier.height(IntrinsicSize.Max).widthIn(max = 960.dp),
-                categoryName = state.category.displayName,
+                categoryName = state.subcategory.category.displayName,
                 subcategoryName = state.subcategory.name,
-                onCategoryClick = {},
-                onSubcategoryClick = {}
+                onCategoryClick = { viewModel.onCategorySelectorClick() },
+                onSubcategoryClick = { viewModel.onSubcategorySelectorClick() }
             )
+
+            if (state.isCategoryDialogShowing) {
+                CategoryDialog(
+                    elements = viewModel.categories,
+                    title = "Select category",
+                    onClick = { viewModel.onCategorySelected(it) },
+                    onDismiss = {
+                        viewModel.onCategoryDialogDismiss()
+                    },
+                )
+            }
+
+            if (state.isSubcategoryDialogShowing) {
+                CategoryDialog(
+                    elements = viewModel.getSubcategories(),
+                    title = "Select subcategory",
+                    isEditable = true,
+                    onClick = { viewModel.onSubcategorySelected(it) },
+                    onEditClick = { viewModel.onEditSubcategoryClick(it) },
+                    onDismiss = {
+                        viewModel.onSubcategoryDialogDismiss()
+                    },
+                    confirmButton = {
+                        Button(onClick = { viewModel.onCreateSubcategoryClick() }) {
+                            Text(text = "New subcategory")
+                        }
+                    }
+                )
+            }
+
+            if (state.isCreateSubcategoryDialogShowing) {
+                EditSubcategoryDialog(
+                    isOpen = state.isCreateSubcategoryDialogShowing,
+                    title = "New subcategory",
+                    subcategory = state.subcategoryName,
+                    onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                    onDismiss = { viewModel.onCreateSubcategoryDialogDismiss() },
+                    onConfirm = { viewModel.onCreateSubcategoryConfirmClick() }
+                )
+            }
+
+            if (state.isEditSubcategoryDialogShowing) {
+                EditSubcategoryDialog(
+                    isOpen = state.isEditSubcategoryDialogShowing,
+                    isEdit = true,
+                    title = "Edit subcategory",
+                    subcategory = state.subcategoryName,
+                    onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                    onDelete = { viewModel.onDeleteSubcategoryClick() },
+                    onDismiss = { viewModel.onEditSubcategoryDialogDismiss() },
+                    onConfirm = { viewModel.onEditSubcategoryConfirmClick(state.originalSubcategoryName) }
+                )
+            }
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -61,8 +119,10 @@ fun ListScreen() {
                     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
                     ListItem(
-                        time = viewModel.solves[solve].time.toString(),
-                        date = viewModel.solves[solve].date.toString(),
+                        time = getTimeStringFromMillis(viewModel.solves[solve].time),
+                        date = "${viewModel.solves[solve].date.dayOfMonth}-" +
+                                "${viewModel.solves[solve].date.monthNumber}-" +
+                                "${viewModel.solves[solve].date.year}",
                         isExpanded = isExpanded,
                         onExpandedClick = { isExpanded = !isExpanded },
                     ) {
