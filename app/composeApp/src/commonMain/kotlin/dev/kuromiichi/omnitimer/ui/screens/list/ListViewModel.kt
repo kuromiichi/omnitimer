@@ -47,9 +47,11 @@ class ListViewModel : ViewModel() {
     }
 
     private fun refreshSolves() {
-        solves =
-            solvesRepository.getSessionSolves(uiState.value.subcategory).filter { !it.isArchived }
-                .toMutableList()
+        if (uiState.value.showArchived) {
+            solves = solvesRepository.getSolves(uiState.value.subcategory).toMutableList()
+        } else {
+            solves = solvesRepository.getSessionSolves(uiState.value.subcategory).toMutableList()
+        }
         _uiState.value = _uiState.value.copy(count = solves.size)
     }
 
@@ -196,6 +198,16 @@ class ListViewModel : ViewModel() {
 
     fun onDeleteClick(solve: Int) {
         solvesRepository.deleteSolve(solves[solve])
+        refreshSolves()
+    }
+
+    fun toggleArchived() {
+        _uiState.value = _uiState.value.copy(showArchived = !uiState.value.showArchived)
+        refreshSolves()
+    }
+
+    fun onArchiveClick(solve: Int) {
+        solvesRepository.updateSolve(solves[solve].copy(isArchived = true))
         refreshSolves()
     }
 }
