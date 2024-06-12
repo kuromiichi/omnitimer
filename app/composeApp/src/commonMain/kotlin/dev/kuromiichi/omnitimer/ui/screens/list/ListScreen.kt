@@ -115,7 +115,7 @@ fun ListScreen() {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(viewModel.solves.count()) { solve ->
+                items(state.count) { solve ->
                     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
                     ListItem(
@@ -137,7 +137,7 @@ fun ListScreen() {
                                 isExpanded = !isExpanded
                                 isExpanded = !isExpanded
                             },
-                            onDeleteClick = {},
+                            onDeleteClick = { viewModel.onDeleteClick(solve) },
                             onArchiveClick = {}
                         )
                     }

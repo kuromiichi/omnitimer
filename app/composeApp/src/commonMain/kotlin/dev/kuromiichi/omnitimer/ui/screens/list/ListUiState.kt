@@ -9,6 +9,7 @@ data class ListUiState(
     val subcategory: Subcategory = Subcategory(UUID.randomUUID(), "Default", Category.THREE),
     val sesionOnly: Boolean = false,
     val archivedOnly: Boolean = false,
+    val count: Int = 0,
     val isCategoryDialogShowing: Boolean = false,
     val isSubcategoryDialogShowing: Boolean = false,
     val isCreateSubcategoryDialogShowing: Boolean = false,

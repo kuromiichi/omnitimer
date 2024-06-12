@@ -50,6 +50,7 @@ class ListViewModel : ViewModel() {
         solves =
             solvesRepository.getSessionSolves(uiState.value.subcategory).filter { !it.isArchived }
                 .toMutableList()
+        _uiState.value = _uiState.value.copy(count = solves.size)
     }
 
     fun onCategorySelectorClick() {
@@ -189,8 +190,12 @@ class ListViewModel : ViewModel() {
 
     fun changePenalty(solveIdx: Int, penalty: Status) {
         val solve = solves[solveIdx].copy(status = penalty)
-        solves[solveIdx] = solve
         solvesRepository.updateSolve(solve)
+        refreshSolves()
+    }
+
+    fun onDeleteClick(solve: Int) {
+        solvesRepository.deleteSolve(solves[solve])
         refreshSolves()
     }
 }
