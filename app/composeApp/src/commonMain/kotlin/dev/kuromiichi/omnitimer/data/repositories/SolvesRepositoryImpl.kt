@@ -1,5 +1,6 @@
 package dev.kuromiichi.omnitimer.data.repositories
 
+import dev.kuromiichi.omnitimer.data.models.Category
 import dev.kuromiichi.omnitimer.data.models.Scramble
 import dev.kuromiichi.omnitimer.data.models.Solve
 import dev.kuromiichi.omnitimer.data.models.Status
@@ -10,6 +11,18 @@ import java.util.UUID
 
 object SolvesRepositoryImpl : SolvesRepository {
     private val db by lazy { DatabaseService.db }
+
+    private fun getSubcategory(id: String): Subcategory {
+        return db.subcategoriesQueries.selectSubcategory(id).executeAsOne().let {
+            Subcategory(
+                UUID.fromString(it.id),
+                it.name,
+                Category.valueOf(
+                    db.categoriesQueries.selectCategoryById(it.category_id).executeAsOne()
+                )
+            )
+        }
+    }
 
     private fun getSubcategoryId(subcategory: Subcategory): String {
         val categoryId = db.categoriesQueries
@@ -99,6 +112,20 @@ object SolvesRepositoryImpl : SolvesRepository {
 
     override fun deleteSolve(solve: Solve) {
         db.solvesQueries.deleteSolve(id = solve.id.toString())
+    }
+
+    override fun getAllSolves(): List<Solve> {
+        return db.solvesQueries.selectAllSolves().executeAsList().map {
+            Solve(
+                UUID.fromString(it.id),
+                it.time,
+                Scramble(it.scramble, it.image),
+                Status.valueOf(it.status),
+                LocalDateTime.parse(it.date),
+                getSubcategory(it.subcategory_id),
+                it.is_archived == 1L
+            )
+        }
     }
 
     override fun deleteAllSolves() {

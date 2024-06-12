@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -57,6 +58,9 @@ kotlin {
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.bottom.sheet.navigator)
             implementation(libs.voyager.transitions)
+
+            // Serialization
+            implementation(libs.kotlinx.serialization.json)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -182,6 +183,56 @@ fun SettingsScreen() {
                 onConfirm = { viewModel.onDeleteSolvesConfirmClick() },
                 onDismiss = { viewModel.onDeleteSolvesDismissClick() }
             )
+
+            SettingsItem(
+                groupName = "Import solves",
+                isExpanded = state.isExpanded["import"] ?: false,
+                onExpandedClick = { viewModel.onExpandedClick("import") }
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TextField(
+                        value = state.jsonField,
+                        onValueChange = { viewModel.onJsonFieldChange(it) },
+                        label = { Text("Paste your solves in JSON format here") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth().weight(1f)
+                    )
+                    Button(onClick = { viewModel.onImportSolvesButtonClick(state.jsonField) }) {
+                        Text("Import solves")
+                    }
+                }
+            }
+            SettingsItem(
+                groupName = "Export solves",
+                isExpanded = state.isExpanded["export"] ?: false,
+                onExpandedClick = { viewModel.onExpandedClick("export") }
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Button(onClick = { viewModel.onExportSolvesButtonClick() }) {
+                        Text("Export solves (Generate JSON text)")
+                    }
+                    if (state.isCopied) {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            Text(
+                                text = "Copied to clipboard",
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
