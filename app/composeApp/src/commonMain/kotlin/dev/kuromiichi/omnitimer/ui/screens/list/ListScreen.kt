@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDisplay
 import dev.kuromiichi.omnitimer.ui.composables.list.ListContent
 import dev.kuromiichi.omnitimer.ui.composables.list.ListItem
-import dev.kuromiichi.omnitimer.ui.composables.timer.CategoryDisplay
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -50,7 +50,9 @@ fun ListScreen() {
             CategoryDisplay(
                 modifier = Modifier.height(IntrinsicSize.Max).widthIn(max = 960.dp),
                 categoryName = state.category.displayName,
-                subcategoryName = state.subcategory.name
+                subcategoryName = state.subcategory.name,
+                onCategoryClick = {},
+                onSubcategoryClick = {}
             )
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp)

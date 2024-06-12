@@ -43,6 +43,9 @@ object SolvesRepositoryImpl : SolvesRepository {
 
     override fun getSolves(subcategory: Subcategory) = getSolvesInSubcategory(subcategory)
 
+    override fun getSessionSolves(subcategory: Subcategory) =
+        getSolvesInSubcategory(subcategory).filter { !it.isArchived }
+
     override fun getSessionBestSolve(subcategory: Subcategory): Solve? {
         val solves = getSolvesInSubcategory(subcategory)
 

@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -39,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import dev.kuromiichi.omnitimer.ui.composables.timer.CategoryDisplay
+import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDialog
+import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDisplay
+import dev.kuromiichi.omnitimer.ui.composables.common.EditSubcategoryDialog
 import dev.kuromiichi.omnitimer.ui.composables.timer.PenaltySelector
 import dev.kuromiichi.omnitimer.ui.composables.timer.ScrambleDisplay
 import dev.kuromiichi.omnitimer.ui.composables.timer.ScrambleImage
@@ -80,10 +84,68 @@ fun TimerScreenPortrait(
         modifier = Modifier.padding(16.dp)
     ) {
         CategoryDisplay(
+            modifier = Modifier.height(IntrinsicSize.Max),
             categoryName = state.subcategory.category.displayName,
             subcategoryName = state.subcategory.name,
-            modifier = Modifier.height(IntrinsicSize.Max)
+            onCategoryClick = { viewModel.onCategorySelectorClick() },
+            onSubcategoryClick = { viewModel.onSubcategorySelectorClick() }
         )
+
+        if (state.isCategoryDialogShowing) {
+            CategoryDialog(
+                elements = viewModel.categories,
+                title = "Select category",
+                onClick = { viewModel.onCategorySelected(it) },
+                onDismiss = {
+                    viewModel.onCategoryDialogDismiss()
+                    focusRequester.requestFocus()
+                },
+            )
+        }
+
+        if (state.isSubcategoryDialogShowing) {
+            CategoryDialog(
+                elements = viewModel.getSubcategories(),
+                title = "Select subcategory",
+                isEditable = true,
+                onClick = { viewModel.onSubcategorySelected(it) },
+                onEditClick = { viewModel.onEditSubcategoryClick(it) },
+                onDismiss = {
+                    viewModel.onSubcategoryDialogDismiss()
+                    focusRequester.requestFocus()
+                },
+                confirmButton = {
+                    Button(onClick = { viewModel.onCreateSubcategoryClick() }) {
+                        Text(text = "New subcategory")
+                    }
+                }
+            )
+        }
+
+        if (state.isCreateSubcategoryDialogShowing) {
+            EditSubcategoryDialog(
+                isOpen = state.isCreateSubcategoryDialogShowing,
+                title = "New subcategory",
+                subcategory = state.subcategoryName,
+                onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                onDismiss = { viewModel.onCreateSubcategoryDialogDismiss() },
+                onConfirm = { viewModel.onCreateSubcategoryConfirmClick() }
+            )
+        }
+
+        if (state.isEditSubcategoryDialogShowing) {
+            EditSubcategoryDialog(
+                isOpen = state.isEditSubcategoryDialogShowing,
+                isEdit = true,
+                title = "Edit subcategory",
+                subcategory = state.subcategoryName,
+                onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                onDelete = { viewModel.onDeleteSubcategoryClick() },
+                onDismiss = { viewModel.onEditSubcategoryDialogDismiss() },
+                onConfirm = { viewModel.onEditSubcategoryConfirmClick(state.originalSubcategoryName) }
+            )
+        }
+
         ScrambleDisplay(
             scramble = state.scramble.value,
             onRefreshClick = {
@@ -191,10 +253,68 @@ fun TimerScreenLandscape(
             modifier = Modifier.height(IntrinsicSize.Max).fillMaxWidth()
         ) {
             CategoryDisplay(
+                modifier = Modifier.weight(1f).fillMaxHeight(),
                 categoryName = state.subcategory.category.displayName,
                 subcategoryName = state.subcategory.name,
-                modifier = Modifier.weight(1f).fillMaxHeight()
+                onCategoryClick = { viewModel.onCategorySelectorClick() },
+                onSubcategoryClick = { viewModel.onSubcategorySelectorClick() }
             )
+
+            if (state.isCategoryDialogShowing) {
+                CategoryDialog(
+                    elements = viewModel.categories,
+                    title = "Select category",
+                    onClick = { viewModel.onCategorySelected(it) },
+                    onDismiss = {
+                        viewModel.onCategoryDialogDismiss()
+                        focusRequester.requestFocus()
+                    },
+                )
+            }
+
+            if (state.isSubcategoryDialogShowing) {
+                CategoryDialog(
+                    elements = viewModel.getSubcategories(),
+                    title = "Select subcategory",
+                    isEditable = true,
+                    onClick = { viewModel.onSubcategorySelected(it) },
+                    onEditClick = { viewModel.onEditSubcategoryClick(it) },
+                    onDismiss = {
+                        viewModel.onSubcategoryDialogDismiss()
+                        focusRequester.requestFocus()
+                    },
+                    confirmButton = {
+                        Button(onClick = { viewModel.onCreateSubcategoryClick() }) {
+                            Text(text = "New subcategory")
+                        }
+                    }
+                )
+            }
+
+            if (state.isCreateSubcategoryDialogShowing) {
+                EditSubcategoryDialog(
+                    isOpen = state.isCreateSubcategoryDialogShowing,
+                    title = "New subcategory",
+                    subcategory = state.subcategoryName,
+                    onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                    onDismiss = { viewModel.onCreateSubcategoryDialogDismiss() },
+                    onConfirm = { viewModel.onCreateSubcategoryConfirmClick() }
+                )
+            }
+
+            if (state.isEditSubcategoryDialogShowing) {
+                EditSubcategoryDialog(
+                    isOpen = state.isEditSubcategoryDialogShowing,
+                    isEdit = true,
+                    title = "Edit subcategory",
+                    subcategory = state.subcategoryName,
+                    onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                    onDelete = { viewModel.onDeleteSubcategoryClick() },
+                    onDismiss = { viewModel.onEditSubcategoryDialogDismiss() },
+                    onConfirm = { viewModel.onEditSubcategoryConfirmClick(state.originalSubcategoryName) }
+                )
+            }
+
             ScrambleDisplay(
                 scramble = state.scramble.value,
                 onRefreshClick = {

@@ -6,7 +6,9 @@ import org.worldcubeassociation.tnoodle.scrambles.PuzzleRegistry
 
 object TNoodleService {
     fun getScramble(category: Category): Scramble {
-        val scrambler = PuzzleRegistry.valueOf(category.name).scrambler
+        val scrambler = PuzzleRegistry.valueOf(
+            if (category == Category.FOUR) "FOUR_FAST" else category.name
+        ).scrambler
 
         val scramble = scrambler.generateScramble()
         val image = scrambler.drawScramble(scramble, scrambler.defaultColorScheme)

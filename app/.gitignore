@@ -166,3 +166,6 @@ sonarlint/
 
 # secret secrets!!!
 SupabaseConfig.kt
+
+# i hate android studio
+.idea/

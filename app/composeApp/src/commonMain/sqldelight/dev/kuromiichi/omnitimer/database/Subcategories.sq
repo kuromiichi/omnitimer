@@ -5,9 +5,18 @@ CREATE TABLE IF NOT EXISTS Subcategories (
     FOREIGN KEY (category_id) REFERENCES Categories(id)
 );
 
+CREATE TABLE IF NOT EXISTS LastSubcategories (
+    category_id INTEGER NOT NULL PRIMARY KEY REFERENCES Categories(id),
+    subcategory_id TEXT REFERENCES Subcategories(id)
+);
+
 selectSubcategoryId:
 SELECT id FROM Subcategories
 WHERE category_id = ? AND name = ?;
+
+selectSubcategory:
+SELECT * FROM Subcategories
+WHERE id = ?;
 
 selectSubcategoriesByCategory:
 SELECT * FROM Subcategories
@@ -25,3 +34,11 @@ WHERE id = ?;
 deleteSubcategory:
 DELETE FROM Subcategories
 WHERE id = ?;
+
+selectLastSubcategory:
+SELECT * FROM LastSubcategories
+WHERE category_id = ?;
+
+insertLastSubcategory:
+INSERT OR REPLACE INTO LastSubcategories (category_id, subcategory_id)
+VALUES (?, ?);
