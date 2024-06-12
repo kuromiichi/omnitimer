@@ -15,4 +15,12 @@ object TNoodleService {
 
         return Scramble(scramble, image.toString())
     }
+
+    fun getImageFromScramble(scramble: String, category: Category): String {
+        val scrambler = PuzzleRegistry.valueOf(
+            if (category == Category.FOUR) "FOUR_FAST" else category.name
+        ).scrambler
+        val image = scrambler.drawScramble(scramble, scrambler.defaultColorScheme)
+        return image.toString()
+    }
 }

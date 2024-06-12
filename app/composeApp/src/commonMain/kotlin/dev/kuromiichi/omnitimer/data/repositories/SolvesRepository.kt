@@ -11,4 +11,5 @@ interface SolvesRepository {
     fun insertSolve(solve: Solve)
     fun updateSolve(solve: Solve)
     fun deleteSolve(solve: Solve)
+    fun getAllSolves(): List<Solve>
 }

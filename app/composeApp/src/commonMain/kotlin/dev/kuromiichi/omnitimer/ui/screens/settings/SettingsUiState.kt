@@ -5,7 +5,9 @@ data class SettingsUiState(
         "account" to false,
         "inspection" to false,
         "stats" to false,
-        "delete" to false
+        "delete" to false,
+        "import" to false,
+        "export" to false
     ),
     val isEnabled: Map<String, Boolean> = mapOf(
         "inspection" to false,
@@ -25,5 +27,7 @@ data class SettingsUiState(
     val isLogin: Boolean = true,
     val isUserLogged: Boolean = false,
     val isLoginDialogShowing: Boolean = false,
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    val jsonField: String = "",
+    val isCopied: Boolean = false,
 )

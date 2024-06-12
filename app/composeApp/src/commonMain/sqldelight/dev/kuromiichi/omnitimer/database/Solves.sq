@@ -15,7 +15,7 @@ SELECT * FROM Solves
 WHERE subcategory_id = ?;
 
 insertSolve:
-INSERT INTO Solves (id, time, scramble, image, status, date, subcategory_id, is_archived)
+INSERT OR IGNORE INTO Solves (id, time, scramble, image, status, date, subcategory_id, is_archived)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
 updateSolve:
@@ -26,3 +26,6 @@ WHERE id = ?;
 deleteSolve:
 DELETE FROM Solves
 WHERE id = ?;
+
+selectAllSolves:
+SELECT * FROM Solves;

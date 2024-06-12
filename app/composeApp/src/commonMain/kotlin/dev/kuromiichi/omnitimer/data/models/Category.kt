@@ -1,5 +1,8 @@
 package dev.kuromiichi.omnitimer.data.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class Category(val displayName: String) {
     TWO("2x2"),
     THREE("3x3"),
