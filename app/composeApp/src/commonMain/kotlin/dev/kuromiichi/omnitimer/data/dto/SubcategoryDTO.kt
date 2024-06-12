@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
-data class SubcategoryDTO (
+data class SubcategoryDTO(
     val id: String,
     val name: String,
     val category: Category

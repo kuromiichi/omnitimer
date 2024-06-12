@@ -18,7 +18,7 @@ object SolvesRepositoryImpl : SolvesRepository {
                 UUID.fromString(it.id),
                 it.name,
                 Category.valueOf(
-                    db.categoriesQueries.selectCategory(it.category_id).executeAsOne()
+                    db.categoriesQueries.selectCategoryById(it.category_id).executeAsOne()
                 )
             )
         }

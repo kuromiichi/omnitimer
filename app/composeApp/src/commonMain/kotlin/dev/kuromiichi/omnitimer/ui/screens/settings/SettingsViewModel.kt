@@ -4,20 +4,16 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.kuromiichi.omnitimer.data.dto.SolveDTO
 import dev.kuromiichi.omnitimer.data.dto.toDTO
 import dev.kuromiichi.omnitimer.data.dto.toSolve
-import dev.kuromiichi.omnitimer.data.models.Solve
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepository
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepository
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
-import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
-import java.io.File
 
 class SettingsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -148,14 +144,18 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun onImportSolvesButtonClick(jsonField: String) {
-        val solves = Json.decodeFromString<List<SolveDTO>>(jsonField)
-        if (solves.isNotEmpty()) {
-            for (solve in solves) {
+        if (jsonField.isEmpty()) return
+        try {
+            val solves = Json.decodeFromString<List<SolveDTO>>(jsonField)
+            solves.forEach { solve ->
                 SolvesRepositoryImpl.insertSolve(solve.toSolve())
             }
-        } else {
-            _uiState.value = _uiState.value.copy(errorMessage = "Invalid JSON format")
-            _uiState.value = _uiState.value.copy(jsonField = "INVALID JSON")
+
+        } catch (e: Exception) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "Invalid import data",
+                jsonField = "INVALID JSON"
+            )
         }
     }
 
@@ -167,6 +167,7 @@ class SettingsViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(isCopied = true)
 
     }
+
     fun onJsonFieldChange(jsonField: String) {
         _uiState.value = _uiState.value.copy(jsonField = jsonField)
     }
