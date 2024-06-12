@@ -52,5 +52,30 @@ object SubcategoryRepositoryImpl : SubcategoriesRepository {
     override fun deleteSubcategory(subcategory: Subcategory) {
         db.subcategoriesQueries.deleteSubcategory(id = subcategory.id.toString())
     }
+
+    override fun selectLastSubcategory(category: Category): Subcategory? {
+        val categoryId = db.categoriesQueries.selectCategoryId(category.name).executeAsOne()
+        val lastSubcategoryId =
+            db.subcategoriesQueries.selectLastSubcategory(categoryId)
+                .executeAsOneOrNull()?.subcategory_id
+        return lastSubcategoryId?.let { id ->
+            db.subcategoriesQueries.selectSubcategory(id).executeAsOne().let {
+                Subcategory(
+                    UUID.fromString(id),
+                    it.name,
+                    category
+                )
+            }
+        }
+    }
+
+    override fun insertLastSubcategory(subcategory: Subcategory) {
+        val categoryId =
+            db.categoriesQueries.selectCategoryId(subcategory.category.name).executeAsOne()
+        db.subcategoriesQueries.insertLastSubcategory(
+            category_id = categoryId,
+            subcategory_id = subcategory.id.toString()
+        )
+    }
 }
 

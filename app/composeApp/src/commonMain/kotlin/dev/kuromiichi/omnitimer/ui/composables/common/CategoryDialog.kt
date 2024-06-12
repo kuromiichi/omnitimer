@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,13 +27,15 @@ fun CategoryDialog(
     modifier: Modifier = Modifier,
     elements: List<String>,
     title: String,
+    isEditable: Boolean = false,
     onClick: (String) -> Unit,
+    onEditClick: (String) -> Unit = {},
     onDismiss: () -> Unit,
-    iconButton: @Composable () -> Unit = {}
+    confirmButton: @Composable () -> Unit = {}
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = {},
+        confirmButton = confirmButton,
         title = {
             Text(text = title)
         },
@@ -38,10 +44,10 @@ fun CategoryDialog(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                elements.forEach {
+                elements.forEach { element ->
                     Surface(
                         modifier = Modifier.fillMaxWidth()
-                            .clickable(onClick = { onClick(it) }),
+                            .clickable(onClick = { onClick(element) }),
                         color = MaterialTheme.colorScheme.secondary,
                         shape = MaterialTheme.shapes.small,
                         shadowElevation = 4.dp
@@ -52,11 +58,18 @@ fun CategoryDialog(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1f),
-                                text = it,
+                                text = element,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            iconButton()
+                            if (isEditable) {
+                                IconButton(onClick = { onEditClick(element) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Edit subcategory"
+                                    )
+                                }
+                            }
                         }
                     }
                 }

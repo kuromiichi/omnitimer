@@ -10,4 +10,6 @@ interface SubcategoriesRepository {
     fun insertSubcategory(subcategory: Subcategory)
     fun updateSubcategory(subcategory: Subcategory)
     fun deleteSubcategory(subcategory: Subcategory)
+    fun selectLastSubcategory(category: Category): Subcategory?
+    fun insertLastSubcategory(subcategory: Subcategory)
 }

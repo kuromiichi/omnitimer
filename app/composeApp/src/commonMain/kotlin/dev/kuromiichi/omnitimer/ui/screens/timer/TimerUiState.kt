@@ -14,5 +14,9 @@ data class TimerUiState(
     val stats: Map<String, String> = mapOf(),
     val timerState: TimerViewModel.TimerState = TimerViewModel.TimerState.Stopped,
     val isCategoryDialogShowing: Boolean = false,
-    val isSubcategoryDialogShowing: Boolean = false
+    val isSubcategoryDialogShowing: Boolean = false,
+    val isCreateSubcategoryDialogShowing: Boolean = false,
+    val isEditSubcategoryDialogShowing: Boolean = false,
+    val originalSubcategoryName: String = "",
+    val subcategoryName: String = ""
 )

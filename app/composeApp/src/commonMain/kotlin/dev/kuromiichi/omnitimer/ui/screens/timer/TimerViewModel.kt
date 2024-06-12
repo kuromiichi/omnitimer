@@ -159,15 +159,106 @@ class TimerViewModel(
     }
 
     fun onCategorySelected(category: String) {
-
+        val subcategory =
+            subcategoryRepository.selectLastSubcategory(Category.entries.find { it.displayName == category }!!)
+                ?: subcategoryRepository.selectSubcategoriesByCategory(Category.entries.find { it.displayName == category }!!)
+                    .first()
+        settingsRepository.setSetting("lastCategory", subcategory.id.toString())
+        subcategoryRepository.insertLastSubcategory(subcategory)
+        _uiState.value = _uiState.value.copy(
+            subcategory = subcategory,
+            isCategoryDialogShowing = false
+        )
+        refreshScramble()
+        generateStats()
     }
 
-    fun onSubcategorySelected(subcategory: String) {
-
+    fun onSubcategorySelected(subcategoryName: String) {
+        val category = uiState.value.subcategory.category
+        val subcategory = subcategoryRepository.selectSubcategoriesByCategory(category)
+            .find { it.name == subcategoryName }
+            ?: subcategoryRepository.selectSubcategoriesByCategory(category).first()
+        settingsRepository.setSetting("lastCategory", subcategory.id.toString())
+        subcategoryRepository.insertLastSubcategory(subcategory)
+        _uiState.value = _uiState.value.copy(
+            subcategory = subcategory,
+            isSubcategoryDialogShowing = false
+        )
+        refreshScramble()
+        generateStats()
     }
 
-    fun onEditSubcategoryClick() {
+    fun onCreateSubcategoryClick() {
+        _uiState.value = _uiState.value.copy(
+            isCreateSubcategoryDialogShowing = true,
+            subcategoryName = ""
+        )
+    }
 
+    fun onEditSubcategoryClick(subcategoryName: String) {
+        _uiState.value = _uiState.value.copy(
+            isEditSubcategoryDialogShowing = true,
+            originalSubcategoryName = subcategoryName,
+            subcategoryName = subcategoryName
+        )
+    }
+
+    fun onCreateSubcategoryDialogDismiss() {
+        _uiState.value = _uiState.value.copy(isCreateSubcategoryDialogShowing = false)
+    }
+
+    fun onEditSubcategoryDialogDismiss() {
+        _uiState.value = _uiState.value.copy(isEditSubcategoryDialogShowing = false)
+    }
+
+    fun onSubcategoryNameChange(name: String) {
+        _uiState.value = _uiState.value.copy(subcategoryName = name)
+    }
+
+    fun onCreateSubcategoryConfirmClick() {
+        if (uiState.value.subcategoryName.isBlank()) return
+        if (subcategoryRepository.selectSubcategoriesByCategory(uiState.value.subcategory.category)
+                .any { it.name == uiState.value.subcategoryName }
+        ) return
+
+        val category = uiState.value.subcategory.category
+        subcategoryRepository.insertSubcategory(
+            Subcategory(
+                UUID.randomUUID(),
+                uiState.value.subcategoryName,
+                category
+            )
+        )
+        onSubcategorySelected(uiState.value.subcategoryName)
+        _uiState.value = _uiState.value.copy(isCreateSubcategoryDialogShowing = false)
+    }
+
+    fun onEditSubcategoryConfirmClick(originalSubcategoryName: String) {
+        if (uiState.value.subcategoryName.isBlank()) return
+        if (subcategoryRepository.selectSubcategoriesByCategory(uiState.value.subcategory.category)
+                .any { it.name == uiState.value.subcategoryName }
+        ) return
+
+        val category = uiState.value.subcategory.category
+        val originalSubcategory = subcategoryRepository.selectSubcategoriesByCategory(category)
+            .find { it.name == originalSubcategoryName }
+
+        originalSubcategory?.let {
+            subcategoryRepository.updateSubcategory(
+                Subcategory(
+                    it.id,
+                    uiState.value.subcategoryName,
+                    category
+                )
+            )
+
+            onSubcategorySelected(uiState.value.subcategoryName)
+        }
+
+        _uiState.value = _uiState.value.copy(
+            isEditSubcategoryDialogShowing = false,
+            isSubcategoryDialogShowing = true
+        )
     }
 
     fun refreshScramble() {
