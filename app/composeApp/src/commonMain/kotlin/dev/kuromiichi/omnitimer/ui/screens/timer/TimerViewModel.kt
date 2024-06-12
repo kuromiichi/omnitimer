@@ -261,6 +261,24 @@ class TimerViewModel(
         )
     }
 
+    fun onDeleteSubcategoryClick() {
+        if (subcategoryRepository
+                .selectSubcategoriesByCategory(uiState.value.subcategory.category).size == 1
+        ) return
+
+        val subcategory =
+            subcategoryRepository.selectSubcategoriesByCategory(uiState.value.subcategory.category)
+                .find { it.name == uiState.value.originalSubcategoryName }
+
+        if (subcategory == uiState.value.subcategory) return
+
+        subcategory?.let {
+            subcategoryRepository.deleteSubcategory(it)
+        }
+
+        _uiState.value = _uiState.value.copy(isEditSubcategoryDialogShowing = false)
+    }
+
     fun refreshScramble() {
         val scramble = TNoodleService.getScramble(uiState.value.subcategory.category)
         _uiState.value = _uiState.value.copy(scramble = scramble)

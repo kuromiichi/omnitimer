@@ -136,9 +136,11 @@ fun TimerScreenPortrait(
         if (state.isEditSubcategoryDialogShowing) {
             EditSubcategoryDialog(
                 isOpen = state.isEditSubcategoryDialogShowing,
+                isEdit = true,
                 title = "Edit subcategory",
                 subcategory = state.subcategoryName,
                 onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                onDelete = { viewModel.onDeleteSubcategoryClick() },
                 onDismiss = { viewModel.onEditSubcategoryDialogDismiss() },
                 onConfirm = { viewModel.onEditSubcategoryConfirmClick(state.originalSubcategoryName) }
             )
@@ -303,9 +305,11 @@ fun TimerScreenLandscape(
             if (state.isEditSubcategoryDialogShowing) {
                 EditSubcategoryDialog(
                     isOpen = state.isEditSubcategoryDialogShowing,
+                    isEdit = true,
                     title = "Edit subcategory",
                     subcategory = state.subcategoryName,
                     onSubcategoryChange = { viewModel.onSubcategoryNameChange(it) },
+                    onDelete = { viewModel.onDeleteSubcategoryClick() },
                     onDismiss = { viewModel.onEditSubcategoryDialogDismiss() },
                     onConfirm = { viewModel.onEditSubcategoryConfirmClick(state.originalSubcategoryName) }
                 )
