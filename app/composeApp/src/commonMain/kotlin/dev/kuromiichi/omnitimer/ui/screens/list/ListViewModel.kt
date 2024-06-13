@@ -48,9 +48,13 @@ class ListViewModel : ViewModel() {
 
     private fun refreshSolves() {
         if (uiState.value.showArchived) {
-            solves = solvesRepository.getSolves(uiState.value.subcategory).toMutableList()
+            solves = solvesRepository.getSolves(uiState.value.subcategory)
+                .reversed()
+                .toMutableList()
         } else {
-            solves = solvesRepository.getSessionSolves(uiState.value.subcategory).toMutableList()
+            solves = solvesRepository.getSessionSolves(uiState.value.subcategory)
+                .reversed()
+                .toMutableList()
         }
         _uiState.value = _uiState.value.copy(count = solves.size)
     }
