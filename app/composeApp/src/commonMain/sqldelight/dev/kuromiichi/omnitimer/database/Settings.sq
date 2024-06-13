@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS Settings (
+    name TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+selectSettings:
+SELECT * FROM Settings;
+
+selectSetting:
+SELECT value FROM Settings
+WHERE name = ?;
+
+updateSetting:
+UPDATE Settings
+SET value = ?
+WHERE name = ?;
+
+insertSetting:
+INSERT OR IGNORE INTO Settings (name, value)
+VALUES (?, ?);
