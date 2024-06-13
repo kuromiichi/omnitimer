@@ -14,7 +14,7 @@ import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepository
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SubcategoriesRepository
-import dev.kuromiichi.omnitimer.data.repositories.SubcategoryRepositoryImpl
+import dev.kuromiichi.omnitimer.data.repositories.SubcategoriesRepositoryImpl
 import dev.kuromiichi.omnitimer.platform.toImageBitmap
 import dev.kuromiichi.omnitimer.services.StatsService
 import dev.kuromiichi.omnitimer.services.TNoodleService
@@ -38,7 +38,7 @@ class TimerViewModel(
 
     private val settingsRepository: SettingsRepository = SettingsRepositoryImpl
     private val solvesRepository: SolvesRepository = SolvesRepositoryImpl
-    private val subcategoryRepository: SubcategoriesRepository = SubcategoryRepositoryImpl
+    private val subcategoryRepository: SubcategoriesRepository = SubcategoriesRepositoryImpl
     private val statsService = StatsService
 
     private var settings: Map<String, String> = settingsRepository.getSettings()
@@ -341,11 +341,20 @@ class TimerViewModel(
                         )
                     )
 
+                    _uiState.value = _uiState.value.copy(isAlerting = false)
                     refreshScramble()
                     generateStats()
                 }
                 if (inspectionEnd - System.currentTimeMillis() < 2000) {
                     isPlusTwo = true
+                }
+                if (
+                    settings["alert"] == "true"
+                    && inspectionEnd - System.currentTimeMillis() < 5000
+                    && !uiState.value.isAlerting
+                    && !isDNF
+                ) {
+                    _uiState.value = _uiState.value.copy(isAlerting = true)
                 }
                 setTime(inspectionEnd - System.currentTimeMillis())
                 delay(10)
@@ -357,6 +366,7 @@ class TimerViewModel(
         if (uiState.value.timerState == TimerState.Inspection) {
             inspectionJob?.cancel()
         }
+        _uiState.value = _uiState.value.copy(isAlerting = false)
 
         startTime = System.currentTimeMillis()
         _uiState.value = uiState.value.copy(timerState = TimerState.Running)

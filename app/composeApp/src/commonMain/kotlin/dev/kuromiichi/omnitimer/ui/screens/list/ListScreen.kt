@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.kuromiichi.omnitimer.data.models.Status
 import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDialog
 import dev.kuromiichi.omnitimer.ui.composables.common.CategoryDisplay
 import dev.kuromiichi.omnitimer.ui.composables.common.EditSubcategoryDialog
@@ -162,7 +163,11 @@ fun ListScreen() {
                     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
                     ListItem(
-                        time = getTimeStringFromMillis(viewModel.solves[solve].time),
+                        time = when (viewModel.solves[solve].status) {
+                            Status.PLUS_TWO -> "${getTimeStringFromMillis(viewModel.solves[solve].time + 2000)}+"
+                            Status.DNF -> "DNF (${getTimeStringFromMillis(viewModel.solves[solve].time)})"
+                            else -> getTimeStringFromMillis(viewModel.solves[solve].time)
+                        },
                         date = "${viewModel.solves[solve].date.dayOfMonth}-" +
                                 "${viewModel.solves[solve].date.monthNumber}-" +
                                 "${viewModel.solves[solve].date.year}",
