@@ -23,6 +23,7 @@ import dev.kuromiichi.omnitimer.utils.now
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -341,11 +342,20 @@ class TimerViewModel(
                         )
                     )
 
+                    _uiState.value = _uiState.value.copy(isAlerting = false)
                     refreshScramble()
                     generateStats()
                 }
                 if (inspectionEnd - System.currentTimeMillis() < 2000) {
                     isPlusTwo = true
+                }
+                if (
+                    settings["alert"] == "true"
+                    && inspectionEnd - System.currentTimeMillis() < 5000
+                    && !uiState.value.isAlerting
+                    && !isDNF
+                ) {
+                    _uiState.value = _uiState.value.copy(isAlerting = true)
                 }
                 setTime(inspectionEnd - System.currentTimeMillis())
                 delay(10)
@@ -357,6 +367,7 @@ class TimerViewModel(
         if (uiState.value.timerState == TimerState.Inspection) {
             inspectionJob?.cancel()
         }
+        _uiState.value = _uiState.value.copy(isAlerting = false)
 
         startTime = System.currentTimeMillis()
         _uiState.value = uiState.value.copy(timerState = TimerState.Running)

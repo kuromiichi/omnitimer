@@ -159,6 +159,7 @@ fun TimerScreenPortrait(
         TimerArea(
             time = state.timerText,
             fontSize = timerFontSize,
+            isAlerting = state.isAlerting,
             onSurfaceClick = { viewModel.toggleTimerState() },
             modifier = Modifier.weight(1f).fillMaxWidth()
                 .focusRequester(focusRequester)
@@ -353,6 +354,7 @@ fun TimerScreenLandscape(
                 TimerArea(
                     time = state.timerText,
                     fontSize = timerFontSize,
+                    isAlerting = state.isAlerting,
                     onSurfaceClick = { viewModel.toggleTimerState() },
                     modifier = Modifier.fillMaxSize()
                         .focusRequester(focusRequester)

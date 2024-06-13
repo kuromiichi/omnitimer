@@ -18,5 +18,6 @@ data class TimerUiState(
     val isCreateSubcategoryDialogShowing: Boolean = false,
     val isEditSubcategoryDialogShowing: Boolean = false,
     val originalSubcategoryName: String = "",
-    val subcategoryName: String = ""
+    val subcategoryName: String = "",
+    val isAlerting: Boolean = false
 )

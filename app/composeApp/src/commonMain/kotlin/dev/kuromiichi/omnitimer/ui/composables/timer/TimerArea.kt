@@ -18,12 +18,13 @@ import androidx.compose.ui.unit.dp
 fun TimerArea(
     time: String,
     fontSize: TextUnit,
+    isAlerting: Boolean,
     onSurfaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
         shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = if (isAlerting) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surfaceVariant,
         shadowElevation = 4.dp,
         onClick = { onSurfaceClick() },
         modifier = modifier
