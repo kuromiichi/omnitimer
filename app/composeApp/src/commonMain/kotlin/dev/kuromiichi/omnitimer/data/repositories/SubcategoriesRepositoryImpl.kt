@@ -5,7 +5,7 @@ import dev.kuromiichi.omnitimer.data.models.Subcategory
 import dev.kuromiichi.omnitimer.services.DatabaseService
 import java.util.UUID
 
-object SubcategoryRepositoryImpl : SubcategoriesRepository {
+object SubcategoriesRepositoryImpl : SubcategoriesRepository {
     private val db by lazy { DatabaseService.db }
 
     override fun selectSubcategoriesByCategory(category: Category): List<Subcategory> {
@@ -21,8 +21,10 @@ object SubcategoryRepositoryImpl : SubcategoriesRepository {
             }
     }
 
-    override fun selectSubcategory(id: UUID): Subcategory {
-        val subcategory = db.subcategoriesQueries.selectSubcategory(id.toString()).executeAsOne()
+    override fun selectSubcategory(id: UUID): Subcategory? {
+        val subcategory =
+            db.subcategoriesQueries.selectSubcategory(id.toString()).executeAsOneOrNull()
+                ?: return null
         val categoryName =
             db.categoriesQueries.selectCategoryById(subcategory.category_id).executeAsOne()
         return Subcategory(
@@ -30,6 +32,21 @@ object SubcategoryRepositoryImpl : SubcategoriesRepository {
             subcategory.name,
             Category.valueOf(categoryName)
         )
+    }
+
+    override fun selectSubcategoryByName(name: String, category: Category): Subcategory? {
+        val categoryId = db.categoriesQueries.selectCategoryId(category.name).executeAsOne()
+        val subcategoryId =
+            db.subcategoriesQueries.selectSubcategoryId(categoryId, name).executeAsOneOrNull()
+        return subcategoryId?.let { id ->
+            db.subcategoriesQueries.selectSubcategory(id).executeAsOne().let {
+                Subcategory(
+                    UUID.fromString(id),
+                    it.name,
+                    category
+                )
+            }
+        }
     }
 
     override fun insertSubcategory(subcategory: Subcategory) {

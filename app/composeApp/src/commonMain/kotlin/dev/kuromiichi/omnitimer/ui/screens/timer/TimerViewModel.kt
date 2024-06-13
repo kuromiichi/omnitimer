@@ -14,7 +14,7 @@ import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepository
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SubcategoriesRepository
-import dev.kuromiichi.omnitimer.data.repositories.SubcategoryRepositoryImpl
+import dev.kuromiichi.omnitimer.data.repositories.SubcategoriesRepositoryImpl
 import dev.kuromiichi.omnitimer.platform.toImageBitmap
 import dev.kuromiichi.omnitimer.services.StatsService
 import dev.kuromiichi.omnitimer.services.TNoodleService
@@ -23,7 +23,6 @@ import dev.kuromiichi.omnitimer.utils.now
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +38,7 @@ class TimerViewModel(
 
     private val settingsRepository: SettingsRepository = SettingsRepositoryImpl
     private val solvesRepository: SolvesRepository = SolvesRepositoryImpl
-    private val subcategoryRepository: SubcategoriesRepository = SubcategoryRepositoryImpl
+    private val subcategoryRepository: SubcategoriesRepository = SubcategoriesRepositoryImpl
     private val statsService = StatsService
 
     private var settings: Map<String, String> = settingsRepository.getSettings()

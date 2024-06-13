@@ -4,12 +4,16 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.kuromiichi.omnitimer.data.dto.SolveDTO
 import dev.kuromiichi.omnitimer.data.dto.toDTO
 import dev.kuromiichi.omnitimer.data.dto.toSolve
+import dev.kuromiichi.omnitimer.data.dto.toSubcategory
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepository
 import dev.kuromiichi.omnitimer.data.repositories.SettingsRepositoryImpl
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepository
 import dev.kuromiichi.omnitimer.data.repositories.SolvesRepositoryImpl
+import dev.kuromiichi.omnitimer.data.repositories.SubcategoriesRepository
+import dev.kuromiichi.omnitimer.data.repositories.SubcategoriesRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.awt.Toolkit
@@ -21,6 +25,7 @@ class SettingsViewModel : ViewModel() {
 
     private val settingsRepository: SettingsRepository = SettingsRepositoryImpl
     private val solvesRepository: SolvesRepository = SolvesRepositoryImpl
+    private val subcategoryRepository: SubcategoriesRepository = SubcategoriesRepositoryImpl
 
     init {
         val settings = settingsRepository.getSettings().mapValues { it.value == "true" }
@@ -148,10 +153,20 @@ class SettingsViewModel : ViewModel() {
         try {
             val solves = Json.decodeFromString<List<SolveDTO>>(jsonField)
             solves.forEach { solve ->
-                SolvesRepositoryImpl.insertSolve(solve.toSolve())
+                var subcategory = subcategoryRepository.selectSubcategoryByName(
+                    solve.subcategory.name,
+                    solve.subcategory.category
+                )
+                if (subcategory == null) {
+                    subcategoryRepository.insertSubcategory(
+                        solve.subcategory.toSubcategory()
+                    )
+                    subcategory = solve.subcategory.toSubcategory()
+                }
+                SolvesRepositoryImpl.insertSolve(solve.toSolve().copy(subcategory = subcategory))
             }
 
-        } catch (e: Exception) {
+        } catch (e: SerializationException) {
             _uiState.value = _uiState.value.copy(
                 errorMessage = "Invalid import data",
                 jsonField = "INVALID JSON"
@@ -165,7 +180,6 @@ class SettingsViewModel : ViewModel() {
         val json = Json.encodeToString(solvesDTO)
         Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(json), null)
         _uiState.value = _uiState.value.copy(isCopied = true)
-
     }
 
     fun onJsonFieldChange(jsonField: String) {
